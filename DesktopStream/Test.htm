@@ -50,11 +50,13 @@
                 appendMessage("* " + noSupportMessage + "<br/>");
                 return;
             }
-
-            appendMessage("* Connecting to server ..<br/>");
+            var host = $('#host').val();
+            var port = $("#port").val();
+            var hostUrl = "ws://" + host + ':' + port + "/";
+            appendMessage("* Connecting to server " + hostUrl + "..<br/>");
             // create a new websocket and connect
-            var host = "localhost"; //"192.168.1.170"; //"localhost" <-- broke for edge, so is "127.0.0.1";
-            ws = new window[support]('ws://'+host +':2012/');
+
+            ws = new window[support](hostUrl);
 
             // when data is comming from the server, this metod is called
             ws.onmessage = function (evt) {
@@ -113,6 +115,7 @@
     </script>
 </head>
 <body>
+    <input type="text" id="host" value="localhost" /> <input type="text" id="port" value="2012" />
     <input type="button" id="connectButton" value="Connect" onclick="connectWebSocket()" /> <input type="button" id="disconnectButton" value="Disconnect" onclick="disconnectWebSocket()" /> <input type="text" id="messageInput" /> <input type="button" id="sendButton" value="Send" onclick="sendMessage()" /> <br />
     <div id="lastMessage"></div>
     <img id="blobImage" />

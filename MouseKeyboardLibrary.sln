@@ -11,22 +11,6 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GlobalMacroRecorder", "Glob
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DesktopStream", "DesktopStream\DesktopStream.csproj", "{0CFF7576-FAF0-4CAB-9271-E49B25AA6B2E}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "references", "references", "{8CCC949A-C2A7-4D38-AFAF-13008142ADEC}"
-	ProjectSection(SolutionItems) = preProject
-		references\SuperSocket.Common.dll = references\SuperSocket.Common.dll
-		references\SuperSocket.Common.pdb = references\SuperSocket.Common.pdb
-		references\SuperSocket.Common.xml = references\SuperSocket.Common.xml
-		references\SuperSocket.SocketBase.dll = references\SuperSocket.SocketBase.dll
-		references\SuperSocket.SocketBase.pdb = references\SuperSocket.SocketBase.pdb
-		references\SuperSocket.SocketBase.xml = references\SuperSocket.SocketBase.xml
-		references\SuperSocket.SocketEngine.dll = references\SuperSocket.SocketEngine.dll
-		references\SuperSocket.SocketEngine.pdb = references\SuperSocket.SocketEngine.pdb
-		references\SuperSocket.SocketEngine.xml = references\SuperSocket.SocketEngine.xml
-		references\SuperWebSocket.dll = references\SuperWebSocket.dll
-		references\SuperWebSocket.pdb = references\SuperWebSocket.pdb
-		references\SuperWebSocket.xml = references\SuperWebSocket.xml
-	EndProjectSection
-EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
