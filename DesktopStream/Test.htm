@@ -1,0 +1,121 @@
+﻿<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<html>
+<head>
+    <title>Test</title>
+    <script type="text/javascript" src="jquery.js"></script>
+    <script type="text/javascript">
+        var noSupportMessage = "Your browser cannot support WebSocket!";
+        var ws;
+        var canvas;
+        var ctx;
+        var urlCreator;
+        function wsMessage(e) {
+            if (typeof e.data === "string") {
+                appendMessage("# " + evt.data + "<br />");
+
+            }
+            else if (e.data instanceof ArrayBuffer) {
+
+            } else if (e.data instanceof Blob) {
+                //showBlob(e.data);
+                blob2canvas(e.data);
+            }
+        }
+        function appendMessage(e) {
+            $('#lastMessage').html(e);
+        }
+
+        function blob2canvas(blob) {
+            var img = new Image();
+            img.onload = function () {
+                if (canvas.width != img.width)
+                    canvas.width = img.width;
+                if (canvas.height != img.height)
+                    canvas.height = img.height;
+                ctx.drawImage(img, 0, 0);
+            }
+            img.src = urlCreator.createObjectURL(blob);// blob;
+        }
+        function showBlob(blob) {
+            //console.log(blob);
+
+            var imageUrl = urlCreator.createObjectURL(blob);
+            document.querySelector("#blobImage").src = imageUrl;
+            //disconnectWebSocket();
+        }
+        function connectSocketServer() {
+            var support = "MozWebSocket" in window ? 'MozWebSocket' : ("WebSocket" in window ? 'WebSocket' : null);
+
+            if (support == null) {
+                appendMessage("* " + noSupportMessage + "<br/>");
+                return;
+            }
+
+            appendMessage("* Connecting to server ..<br/>");
+            // create a new websocket and connect
+            var host = "localhost"; //"192.168.1.170"; //"localhost" <-- broke for edge, so is "127.0.0.1";
+            ws = new window[support]('ws://'+host +':2012/');
+
+            // when data is comming from the server, this metod is called
+            ws.onmessage = function (evt) {
+                wsMessage(evt);
+            }
+            ws.onerror = function (event) {
+                console.error("WebSocket error observed:", event);
+            };
+
+            // when the connection is established, this method is called
+            ws.onopen = function () {
+                appendMessage('* Connection open<br/>');
+                $('#messageInput').attr("disabled", "");
+                $('#sendButton').attr("disabled", "");
+                $('#connectButton').attr("disabled", "disabled");
+                $('#disconnectButton').attr("disabled", "");
+            };
+
+            // when the connection is closed, this method is called
+            ws.onclose = function () {
+                appendMessage('* Connection closed<br/>');
+                $('#messageInput').attr("disabled", "disabled");
+                $('#sendButton').attr("disabled", "disabled");
+                $('#connectButton').attr("disabled", "");
+                $('#disconnectButton').attr("disabled", "disabled");
+            }
+        }
+
+        function sendMessage() {
+            if (ws) {
+                var messageBox = document.getElementById('messageInput');
+                ws.send(messageBox.value);
+                messageBox.value = "";
+            }
+        }
+
+        function disconnectWebSocket() {
+            if (ws) {
+                ws.close();
+            }
+        }
+
+        function connectWebSocket() {
+            connectSocketServer();
+        }
+
+        window.onload = function () {
+            $('#messageInput').attr("disabled", "disabled");
+            $('#sendButton').attr("disabled", "disabled");
+            $('#disconnectButton').attr("disabled", "disabled");
+            canvas = document.getElementById('canvas');
+            ctx = canvas.getContext('2d');
+            urlCreator = window.URL || window.webkitURL;
+        }
+
+    </script>
+</head>
+<body>
+    <input type="button" id="connectButton" value="Connect" onclick="connectWebSocket()" /> <input type="button" id="disconnectButton" value="Disconnect" onclick="disconnectWebSocket()" /> <input type="text" id="messageInput" /> <input type="button" id="sendButton" value="Send" onclick="sendMessage()" /> <br />
+    <div id="lastMessage"></div>
+    <img id="blobImage" />
+    <canvas id="canvas" height="500" width="500"></canvas>
+</body>
+</html>
