@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio Version 16
-VisualStudioVersion = 16.0.29418.71
+# Visual Studio 15
+VisualStudioVersion = 15.0.28307.852
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MouseKeyboardLibrary", "MouseKeyboardLibrary\MouseKeyboardLibrary.csproj", "{F419622F-4D82-40A6-B4FB-3FE36579F018}"
 EndProject
@@ -10,6 +10,10 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GlobalMacroRecorder", "GlobalMacroRecorder\GlobalMacroRecorder.csproj", "{81AE332F-E43D-429B-872A-14F5418FEA7F}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DesktopStream", "DesktopStream\DesktopStream.csproj", "{0CFF7576-FAF0-4CAB-9271-E49B25AA6B2E}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WindowsFormsApp1", "WindowsFormsApp1\WindowsFormsApp1.csproj", "{6A11F644-17AC-4B6B-A8CF-1E944CA69D86}"
+EndProject
+Project("{E53339B2-1760-4266-BCC7-CA923CBCF16C}") = "docker-compose", "docker-compose.dcproj", "{950CBA9B-60FE-4B89-8EC8-7DEFB4CB469A}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -33,6 +37,14 @@ Global
 		{0CFF7576-FAF0-4CAB-9271-E49B25AA6B2E}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{0CFF7576-FAF0-4CAB-9271-E49B25AA6B2E}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{0CFF7576-FAF0-4CAB-9271-E49B25AA6B2E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{6A11F644-17AC-4B6B-A8CF-1E944CA69D86}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{6A11F644-17AC-4B6B-A8CF-1E944CA69D86}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{6A11F644-17AC-4B6B-A8CF-1E944CA69D86}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{6A11F644-17AC-4B6B-A8CF-1E944CA69D86}.Release|Any CPU.Build.0 = Release|Any CPU
+		{950CBA9B-60FE-4B89-8EC8-7DEFB4CB469A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{950CBA9B-60FE-4B89-8EC8-7DEFB4CB469A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{950CBA9B-60FE-4B89-8EC8-7DEFB4CB469A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{950CBA9B-60FE-4B89-8EC8-7DEFB4CB469A}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

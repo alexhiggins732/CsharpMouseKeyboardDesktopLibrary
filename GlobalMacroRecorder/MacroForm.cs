@@ -70,8 +70,6 @@ namespace GlobalMacroRecorder
         {
             var scalingFactor = getScalingFactor();
             ScaleX = ScaleY = scalingFactor;
-
-
         }
         public Point ScalePoint(Point input)
         {

@@ -1,0 +1,12 @@
+version: '3.4'
+
+services:
+  desktopstream:
+    image: ${DOCKER_REGISTRY-}desktopstream
+    build:
+      args:
+        source: ./
+      context: C:\Source\Repos\MouseAndKeyboardMacroRecorder\MouseKeyboardLib-Revised\MouseKeyboardLibrary\DesktopStream
+      dockerfile: Dockerfile
+    stdin_open: true
+    tty: true
