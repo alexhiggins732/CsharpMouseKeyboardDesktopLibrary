@@ -125,6 +125,16 @@
   <ItemGroup>
     <Content Include="Resources\1416277317_352550.ico" />
   </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\MouseKeyboardEvents\MouseKeyboardEvents.csproj">
+      <Project>{0466ae99-a905-4719-a084-b91727e1547e}</Project>
+      <Name>MouseKeyboardEvents</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\MouseKeyboardLibrary\MouseKeyboardLibrary.csproj">
+      <Project>{f419622f-4d82-40a6-b4fb-3fe36579f018}</Project>
+      <Name>MouseKeyboardLibrary</Name>
+    </ProjectReference>
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

@@ -78,6 +78,14 @@
       <Project>{81ae332f-e43d-429b-872a-14f5418fea7f}</Project>
       <Name>GlobalMacroRecorder</Name>
     </ProjectReference>
+    <ProjectReference Include="..\MouseKeyboardEvents\MouseKeyboardEvents.csproj">
+      <Project>{0466ae99-a905-4719-a084-b91727e1547e}</Project>
+      <Name>MouseKeyboardEvents</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\ScreenRecorder\ScreenRecorder.csproj">
+      <Project>{3169979e-d8d8-4e14-b467-e186a029a984}</Project>
+      <Name>ScreenRecorder</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
