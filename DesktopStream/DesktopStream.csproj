@@ -81,7 +81,15 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="jquery.js" />
+    <Content Include="jquery.mousewheel.min.js" />
+    <Content Include="mousekeyEvent.js" />
     <Content Include="Test.htm" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\MouseKeyboardEvents\MouseKeyboardEvents.csproj">
+      <Project>{0466ae99-a905-4719-a084-b91727e1547e}</Project>
+      <Name>MouseKeyboardEvents</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

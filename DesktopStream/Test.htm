@@ -3,6 +3,7 @@
 <head>
     <title>Test</title>
     <script type="text/javascript" src="jquery.js"></script>
+    <script type="text/javascript" src="jquery.mousewheel.min.js"></script>
     <script type="text/javascript">
         var noSupportMessage = "Your browser cannot support WebSocket!";
         var ws;
@@ -11,7 +12,7 @@
         var urlCreator;
         function wsMessage(e) {
             if (typeof e.data === "string") {
-                appendMessage("# " + evt.data + "<br />");
+                //appendMessage("# " + evt.data + "<br />");
 
             }
             else if (e.data instanceof ArrayBuffer) {
@@ -92,6 +93,28 @@
                 messageBox.value = "";
             }
         }
+        function sendEvent(event) {
+            var eventJson = JSON.stringify(event);
+            sendEventMesage(eventJson)
+        }
+        function sendEventMesage(eventJson) {
+            if (ws) {
+                //var messageBox = document.getElementById('messageInput');
+                //ws.send(eventJson);
+                //messageBox.value = "";
+                console.log(eventJson);
+            }
+        }
+
+        function sendCompactEvent(event) {
+            var data = getCompactEventData(event);
+            var message = {};
+            message.Type = 0;
+            message.Payload = data;
+            sendEvent(message);
+        }
+
+
 
         function disconnectWebSocket() {
             if (ws) {
@@ -110,15 +133,73 @@
             canvas = document.getElementById('canvas');
             ctx = canvas.getContext('2d');
             urlCreator = window.URL || window.webkitURL;
+            //$(document).mousemove((e) => onMouseMove(e));
+            //$(document).mousedown((e) => onMouseDown(e));
+            //$(document).mouseup((e) => onMouseUp(e));
+            //window.addEventListener("wheel", event => onMouseWheel(event));
+            $(document).keydown((e) => onKeyDown(e));
+            //$(document).onKeyUp((e) => onKeyUp(e));
+
+
+        }
+
+        function onKeyDown(e) {
+            $('#keyX').val(e.pageX);
+            $('#keyY').val(e.pageY);
+            $('#keyEventName').val(e.type);
+            //console.log(e);
+            sendCompactEvent(e);
+        }
+        function onKeyUp(e) {
+            $('#keyX').val(e.pageX);
+            $('#keyY').val(e.pageY);
+            $('#keyEventName').val(e.type);
+            //console.log(e);
+            sendCompactEvent(e);
+        }
+        function onMouseMove(e) {
+            $('#mouseX').val(e.pageX);
+            $('#mouseY').val(e.pageY);
+            $('#mouseEventName').val(e.type);
+            //console.log(e);
+            sendCompactEvent(e);
+        }
+        function onMouseDown(e) {
+            $('#mouseX').val(e.pageX);
+            $('#mouseY').val(e.pageY);
+            $('#mouseEventName').val(e.type);
+            //console.log(e);
+            sendCompactEvent(e);
+        }
+        function onMouseUp(e) {
+            $('#mouseX').val(e.pageX);
+            $('#mouseY').val(e.pageY);
+            $('#mouseEventName').val(e.type);
+            //console.log(e);
+            sendCompactEvent(e);
+        }
+        function onMouseWheel(e) {
+            $('#mouseX').val(e.wheelDeltaX);
+            $('#mouseY').val(e.wheelDeltaY);
+            $('#mouseEventName').val(e.type);
+            //console.log(e);
+            sendCompactEvent(e);
+
         }
 
     </script>
 </head>
 <body>
-    <input type="text" id="host" value="localhost" /> <input type="text" id="port" value="2012" />
-    <input type="button" id="connectButton" value="Connect" onclick="connectWebSocket()" /> <input type="button" id="disconnectButton" value="Disconnect" onclick="disconnectWebSocket()" /> <input type="text" id="messageInput" /> <input type="button" id="sendButton" value="Send" onclick="sendMessage()" /> <br />
+    <input type="text" id="host" value="localhost" /> <input type="text" id="port" value="`2012" />
+    <input type="button" id="connectButton" value="Connect" onclick="connectWebSocket()" />
+    <input type="button" id="disconnectButton" value="Disconnect" onclick="disconnectWebSocket()" />
+    <input type="text" id="messageInput" /> <input type="button" id="sendButton" value="Send" onclick="sendMessage()" />
+    X: <input type="text" id="mouseX" value="" /> Y: <input type="text" id="mouseY" value="" /> <input type="text" id="mouseEventName" />
+    X: <input type="text" id="keyX" value="" /> Y: <input type="text" id="keyX" value="" /> <input type="text" id="keyEventName" />
+    <br />
     <div id="lastMessage"></div>
     <img id="blobImage" />
     <canvas id="canvas" height="500" width="500"></canvas>
+
 </body>
 </html>

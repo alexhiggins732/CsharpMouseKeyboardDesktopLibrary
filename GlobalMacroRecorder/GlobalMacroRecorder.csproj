@@ -71,6 +71,7 @@
     <Reference Include="System.Windows.Forms" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="MouseKeyBoardNetwork.cs" />
     <Compile Include="Resources\Constants.cs" />
     <Compile Include="Resources\GlobalHotkey.cs" />
     <Compile Include="MacroForm.cs">
@@ -79,7 +80,6 @@
     <Compile Include="MacroForm.Designer.cs">
       <DependentUpon>MacroForm.cs</DependentUpon>
     </Compile>
-    <Compile Include="Macro.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="ScreenRecorder.cs" />
@@ -126,6 +126,10 @@
     <Content Include="Resources\1416277317_352550.ico" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\..\MouseKeyboardEvents\MouseKeyboardEvents.csproj">
+      <Project>{0466ae99-a905-4719-a084-b91727e1547e}</Project>
+      <Name>MouseKeyboardEvents</Name>
+    </ProjectReference>
     <ProjectReference Include="..\MouseKeyboardLibrary\MouseKeyboardLibrary.csproj">
       <Project>{f419622f-4d82-40a6-b4fb-3fe36579f018}</Project>
       <Name>MouseKeyboardLibrary</Name>

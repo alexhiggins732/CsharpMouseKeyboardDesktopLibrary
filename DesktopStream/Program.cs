@@ -14,7 +14,7 @@ using System.Runtime.InteropServices;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
-
+using MouseKeyboardEvents;
 namespace DesktopStream
 {
     /// <summary>
@@ -159,9 +159,11 @@ namespace DesktopStream
         static void appServer_NewMessageReceived(WebSocketSession session, string message)
         {
             //Send the received message back
+            var browserEvent = BrowserEventFactory.Parse(message);
             session.Send("Server: " + message);
         }
     }
+
 
     public class ScreenShotUtility
     {
