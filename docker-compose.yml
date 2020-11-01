@@ -1,0 +1,8 @@
+version: '3.4'
+
+services:
+  desktopstream:
+    image: ${DOCKER_REGISTRY-}desktopstream
+    build:
+      context: .\DesktopStream
+      dockerfile: Dockerfile

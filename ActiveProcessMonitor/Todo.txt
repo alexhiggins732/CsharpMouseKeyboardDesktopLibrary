@@ -1,0 +1,72 @@
+Remove redundant events:
+-> successive mouse moves:
+	-> start{x, y} - dest {x, y} -> interpolate time
+	
+Labeled tasks:
+open chrome
+open firefox
+open notepad
+open edge
+
+QLearing:
+ ulong per event:
+ var event= 
+
+
+
+screen captures
+=> labels:
+	Desktop Windows 10, active application
+	// with active process visible learn to identify the OS=windows, OS Version (windows 10), Context=Desktop, State="Full Desktop", activeProcessName);
+	NN.Learn(DesktopImage, labels:= new[] {"windows", "windows 10", "desktop", "full desktop", processName});
+	// with active process visible learn to identify the OS Time, OS=windows, OS Version (windows 10), Context=Desktop, State="Full Desktop", activeProcessName);
+	NN.Learn(DesktopImage, labels:= new[] {"windows", "windows 10", "desktop", "full desktop", "time"}, DateTime.Now.ToShortTimeString());
+	// with active process visible learn to identify the OS Date, OS=windows, OS Version (windows 10), Context=Desktop, State="Full Desktop", activeProcessName);
+	NN.Learn(DesktopImage, labels:= new[] {"windows", "windows 10", "desktop", "full desktop", "date"}, DateTime.Now.ToShortDateString());
+	// with active process visible learn to identify the start menu placement, OS=windows, OS Version (windows 10), Context=Desktop, State="Full Desktop", activeProcessName);
+	NN.Learn(DesktopImage, labels:= new[] {"windows", "windows 10", "desktop", "full desktop", "start menu"}, new point{x,y});
+	// with active process visible learn to identify the start menu placement, OS=windows, OS Version (windows 10), Context=Desktop, State="Full Desktop", activeProcessName);
+	NN.Learn(DesktopImage, labels:= new[] {"windows", "windows 10", "desktop", "full desktop", "search", "search menu"}, new point{x,y});	
+
+
+	NN.Learn(WindowImage, labels:= new[] {"windows", "windows 10", "window", "active window",processName});
+	// learn to classify the window location
+	NN.Learn(DesktopImage, labels:= new[] {"windows", "windows 10", "window", "active window", "window location",processName})
+	
+	// move the taskbar around: left, right, bottom, top
+	
+	// use task bar context menus -> task manager, show deskop, touch key pad, touch pad.
+	
+	// For Monitor.ActiveProcess.changed==false; Take discrete screenshots at longer interval and do diff.
+	// => train NN on diff.
+	//	save space by discarding large pct of non-diffed. 
+	// For diffed, Q-Learn using UIEvents(mouse, keys) to recreate state.
+	// 	=> EG, when launching a text editor with a new document the screen shot will be blank, 1 minute later it might have a few paragrpahs and 10 minutes later many paragraphs.
+	// Using screen shot samples at interval I, for N samples(n..I), Q-Learn to go from one screenshot to the next by generating UIEvents and sending them to MLUI interface.
+		// reward for least diff in screen shot comparison.
+		// reward for comparing raw text with diff of zero.
+		// reward for transition from state to state with few steps.
+		// => can emulate MLUI using a mock interface with the full os experience. This would allow rejection of potentially harmful keys combinations (eg deleting the entire hard drive).
+		//  with full OS experience must be sandboxed in aresetable VM (ie docker) with realtime monitoring so ML can learn not to take destructive events which can then be transferred to a full vm.
+		//	=> If this can be ported to linux, it can be ran on UBUNTU in .net core: https://github.com/alexhiggins732/docker-ubuntu-vnc-desktop
+		
+	// Impement NN Detection for apps that are still loading. EG Microsoft.Photos screenshots are often taken prior to rendering resulting in black or white screen for the app.
+	//	simarly browsers (EG, chrome) take a few seconds to "load" the home page. Web pages might be simalar.
+
+	// Implement detection of tabs within applications
+	NN.Learn(image, "tabs", {hasTabs=true|false});
+	
+	// Implement detection of tabs switching within an application (eg, notepad++, visual studio, web browsers) because process detection can occurs with windows foreground switching but not within a process.
+	// 	For browsers:
+	//		Chrome: Main Window Title Changes
+	// For NotePad++: Main Window Title Changes.
+	
+	// Going from windows explorer to folder properites dialog not detected.
+	// Implement Screen shot diffs
+	
+	// Can NN.Learn(args) and compare(NN.Current, NN.Updated) => if changes are insignifigant data can probably be discarded.
+	
+	// AI IDE => vertical Split textboxes, capture input in left textbox and ML attempts to predict what will be typed in left.
+	
+	// Define interface for input (mouse, keyboard, audio, screen)
+	// NN for mouse+keyboard= 64 neurons: train for invalid input.

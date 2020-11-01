@@ -69,12 +69,6 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\MouseKeyboardLibrary\MouseKeyboardLibrary.csproj">
-      <Project>{F419622F-4D82-40A6-B4FB-3FE36579F018}</Project>
-      <Name>MouseKeyboardLibrary</Name>
-    </ProjectReference>
-  </ItemGroup>
-  <ItemGroup>
     <BootstrapperPackage Include="Microsoft.Net.Client.3.5">
       <Visible>False</Visible>
       <ProductName>.NET Framework 3.5 SP1 Client Profile</ProductName>
@@ -85,6 +79,16 @@
       <ProductName>.NET Framework 3.5 SP1</ProductName>
       <Install>true</Install>
     </BootstrapperPackage>
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\MouseKeyboardEvents\MouseKeyboardEvents.csproj">
+      <Project>{0466ae99-a905-4719-a084-b91727e1547e}</Project>
+      <Name>MouseKeyboardEvents</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\MouseKeyboardLibrary\MouseKeyboardLibrary.csproj">
+      <Project>{f419622f-4d82-40a6-b4fb-3fe36579f018}</Project>
+      <Name>MouseKeyboardLibrary</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

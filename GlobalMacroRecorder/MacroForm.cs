@@ -8,14 +8,31 @@ using System.Runtime.InteropServices;
 using System.Threading;
 using System.Windows.Forms;
 using Hotkeys;
+using MouseKeyboardEvents;
 using MouseKeyboardLibrary;
 using Newtonsoft.Json;
 
 namespace GlobalMacroRecorder
 {
+    //TODO: Seperate functionality to class and libraries.
+    /*
+    - Desktop Hook
+    - Keyboard hook
+    - Mouse hook
+
+    - Events: Implement buffer for storage and reading.
+    -- Either partition into files or append to existing.
+        EventStorage: Buffer - file.partion using guid and part and then combine?
+            .AddEvents(params events); if(session == null) =session = new session {fileName='ts.ext', Format=Json|Binary}; eventBuffer.AddRange(events); (full?? full=StoreEvents())
+            .StoreEvents() => File.AppendAllBytes(session.FileName, data)|File.AppendAllText(session.FileName,data);
+            .Dispose()=> StoreEvents(); Session = null;
+            
+
+
+    */
     public partial class MacroForm : Form
     {
-        public List<MacroEvent> events = new List<MacroEvent>();
+        public List<MouseKeyEvent> events = new List<MouseKeyEvent>();
         private readonly KeyboardHook keyboardHook = new KeyboardHook();
         private readonly MouseHook mouseHook = new MouseHook();
         private int lastTimeRecorded;
@@ -55,7 +72,7 @@ namespace GlobalMacroRecorder
         }
 
 
-        private float getScalingFactor()
+        private float GetScalingFactor()
         {
             Graphics g = Graphics.FromHwnd(IntPtr.Zero);
             IntPtr desktop = g.GetHdc();
@@ -68,10 +85,8 @@ namespace GlobalMacroRecorder
         }
         void GetScale()
         {
-            var scalingFactor = getScalingFactor();
+            var scalingFactor = GetScalingFactor();
             ScaleX = ScaleY = scalingFactor;
-
-
         }
         public Point ScalePoint(Point input)
         {
@@ -92,7 +107,7 @@ namespace GlobalMacroRecorder
         {
             if (recording)
             {
-                Stopclick();
+                StopClick();
             }
             else if (PlayWorker.IsBusy)
             {
@@ -107,31 +122,31 @@ namespace GlobalMacroRecorder
 
         private void MouseHook_MouseWheel(object sender, MouseEventArgs e)
         {
-            events.Add(new MacroEvent(MacroEventType.MouseWheel, e, Environment.TickCount - lastTimeRecorded));
+            events.Add(new MouseKeyEvent(MouseKeyEventType.MouseWheel, e, Environment.TickCount - lastTimeRecorded));
             lastTimeRecorded = Environment.TickCount;
         }
         private void mouseHook_MouseMove(object sender, MouseEventArgs e)
         {
-            events.Add(new MacroEvent(MacroEventType.MouseMove, e, Environment.TickCount - lastTimeRecorded));
+            events.Add(new MouseKeyEvent(MouseKeyEventType.MouseMove, e, Environment.TickCount - lastTimeRecorded));
             lastTimeRecorded = Environment.TickCount;
         }
 
         private void mouseHook_MouseDown(object sender, MouseEventArgs e)
         {
-            events.Add(new MacroEvent(MacroEventType.MouseDown, e, Environment.TickCount - lastTimeRecorded));
+            events.Add(new MouseKeyEvent(MouseKeyEventType.MouseDown, e, Environment.TickCount - lastTimeRecorded));
             lastTimeRecorded = Environment.TickCount;
         }
 
         private void mouseHook_MouseUp(object sender, MouseEventArgs e)
         {
-            events.Add(new MacroEvent(MacroEventType.MouseUp, e, Environment.TickCount - lastTimeRecorded));
+            events.Add(new MouseKeyEvent(MouseKeyEventType.MouseUp, e, Environment.TickCount - lastTimeRecorded));
             lastTimeRecorded = Environment.TickCount;
         }
 
         private void keyboardHook_KeyDown(object sender, KeyEventArgs e)
         {
             if (e.KeyCode == Keys.Escape) return;
-            events.Add(new MacroEvent(MacroEventType.KeyDown, e, Environment.TickCount - lastTimeRecorded));
+            events.Add(new MouseKeyEvent(MouseKeyEventType.KeyDown, e, Environment.TickCount - lastTimeRecorded));
             lastTimeRecorded = Environment.TickCount;
         }
 
@@ -143,7 +158,7 @@ namespace GlobalMacroRecorder
 
         private void keyboardHook_KeyUp(object sender, KeyEventArgs e)
         {
-            events.Add(new MacroEvent(MacroEventType.KeyUp, e, Environment.TickCount - lastTimeRecorded));
+            events.Add(new MouseKeyEvent(MouseKeyEventType.KeyUp, e, Environment.TickCount - lastTimeRecorded));
             lastTimeRecorded = Environment.TickCount;
         }
 
@@ -163,7 +178,7 @@ namespace GlobalMacroRecorder
 
         private void recordStopButton_Click(object sender, EventArgs e)
         {
-            Stopclick();
+            StopClick();
         }
 
         private void playBackMacroButton_Click(object sender, EventArgs e)
@@ -188,7 +203,7 @@ namespace GlobalMacroRecorder
             var eventpass = 0;
             //MouseSimulator.X = 0;
             //MouseSimulator.Y = 0;
-            foreach (MacroEvent macroEvent in events)
+            foreach (MouseKeyEvent macroEvent in events)
             {
                 ++eventpass;
                 PlayWorker.ReportProgress(eventpass);
@@ -200,39 +215,39 @@ namespace GlobalMacroRecorder
                 Thread.Sleep(macroEvent.TimeSinceLastEvent);
                 switch (macroEvent.MacroEventType)
                 {
-                    case MacroEventType.MouseMove:
+                    case MouseKeyEventType.MouseMove:
                         {
                             var mouseArgs = (MouseEventArgs)macroEvent.MouseArgs;
                             MouseSimulator.X = (int)(mouseArgs.X / ScaleX);
                             MouseSimulator.Y = (int)(mouseArgs.Y / ScaleY);
                         }
                         break;
-                    case MacroEventType.MouseDown:
+                    case MouseKeyEventType.MouseDown:
                         {
                             var mouseArgs = (MouseEventArgs)macroEvent.MouseArgs;
                             MouseSimulator.MouseDown(mouseArgs.Button);
                         }
                         break;
-                    case MacroEventType.MouseUp:
+                    case MouseKeyEventType.MouseUp:
                         {
                             var mouseArgs = (MouseEventArgs)macroEvent.MouseArgs;
                             MouseSimulator.MouseUp(mouseArgs.Button);
                         }
                         break;
-                    case MacroEventType.MouseWheel:
+                    case MouseKeyEventType.MouseWheel:
                         {
                             var mouseArgs = (MouseEventArgs)macroEvent.MouseArgs;
                             MouseSimulator.MouseWheel(mouseArgs.Delta);
                         }
                         break;
-                    case MacroEventType.KeyDown:
+                    case MouseKeyEventType.KeyDown:
                         {
                             var keyArgs = (KeyEventArgs)macroEvent.KeyArgs;
 
                             KeyboardSimulator.KeyDown(keyArgs.KeyCode);
                         }
                         break;
-                    case MacroEventType.KeyUp:
+                    case MouseKeyEventType.KeyUp:
                         {
                             var keyArgs = (KeyEventArgs)macroEvent.KeyArgs;
                             KeyboardSimulator.KeyUp(keyArgs.KeyCode);
@@ -273,11 +288,11 @@ namespace GlobalMacroRecorder
         {
             if (stoponselect.Checked)
             {
-                Stopclick();
+                StopClick();
             }
         }
 
-        public void Stopclick()
+        public void StopClick()
         {
             if (recording)
             {
@@ -300,7 +315,7 @@ namespace GlobalMacroRecorder
         {
             if (stoponselect.Checked)
             {
-                Stopclick();
+                StopClick();
             }
         }
 
@@ -317,7 +332,9 @@ namespace GlobalMacroRecorder
                 var ts = DateTime.Now.ToString("yyyy-MM-dd_hh-mm-ss");
                 var json = JsonConvert.SerializeObject(events, Formatting.Indented);
                 Directory.CreateDirectory("EventsJson");
-                File.WriteAllText($"EventsJson/data-{ts}.json", json);
+                var fileName = $"EventsJson/data-{ts}";
+                //File.WriteAllText($"EventsJson/data-{ts}.json", json);
+                EventStorage.Save(events, fileName);
                 //using (Stream stream = File.Open("data.bin", FileMode.Create))
                 //{
                 //    bin.Serialize(stream, events);
@@ -325,7 +342,7 @@ namespace GlobalMacroRecorder
             }
             catch (Exception ex)
             {
-                MessageBox.Show("Could not save the file because of a system IOException. Try again later.");
+                MessageBox.Show($"Error saving file. Try again later. {ex}");
             }
 
         }
@@ -374,9 +391,27 @@ namespace GlobalMacroRecorder
                 if (ofd.ShowDialog() == DialogResult.OK)
                 {
                     events.Clear();
-                    var json = File.ReadAllText(ofd.FileName);
-                    var JsonEvents = JsonConvert.DeserializeObject<List<MacroEvent>>(json);
-                    events.AddRange(JsonEvents);
+                    //old
+                    //var json = File.ReadAllText(ofd.FileName);
+                    //var JsonEvents = JsonConvert.DeserializeObject<List<MacroEvent>>(json);
+                    //var binaryEvents = JsonEvents.Select(x => (ulong)x).ToList();
+                    //var binaryData = binaryEvents.SelectMany(x => BitConverter.GetBytes(x)).ToList();
+                    //File.Delete(ofd.FileName + ".bin");
+                    //File.WriteAllBytes(ofd.FileName + ".bin", binaryData.ToArray());
+                    //var binaryBytes = File.ReadAllBytes(ofd.FileName + ".bin");
+                    //var binaryBytesData = Enumerable.Range(0, binaryBytes.Length / 8)
+                    //    .Select(i => BitConverter.ToUInt64(binaryBytes, i * 8))
+                    //    .ToArray();
+                    //var binaryByteEvents = binaryBytesData.Select(x => new MacroEvent(x)).ToList();
+                    //var binaryByteEventsJson= JsonConvert.SerializeObject(binaryByteEvents, Formatting.Indented);
+                    //var objectEvents = binaryEvents.Select(x => new MacroEvent(x)).ToList();
+                    //var objectJson = JsonConvert.SerializeObject(objectEvents, Formatting.Indented);
+                    //bool isEqual2 = binaryByteEventsJson == objectJson;
+                    //bool isEqual = json == objectJson;
+                    //events.AddRange(JsonEvents);
+                    var storedEvents = EventStorage.LoadFromJson(ofd.FileName);
+                    events.AddRange(storedEvents);
+                       
                     loaded = true;
                 }
             }
