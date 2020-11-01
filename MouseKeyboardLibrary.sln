@@ -11,6 +11,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GlobalMacroRecorder", "Glob
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DesktopStream", "DesktopStream\DesktopStream.csproj", "{0CFF7576-FAF0-4CAB-9271-E49B25AA6B2E}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GraphicsTests", "GraphicsTests\GraphicsTests.csproj", "{05D59232-7331-42C5-8CFA-953FFD19651C}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -33,6 +35,10 @@ Global
 		{0CFF7576-FAF0-4CAB-9271-E49B25AA6B2E}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{0CFF7576-FAF0-4CAB-9271-E49B25AA6B2E}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{0CFF7576-FAF0-4CAB-9271-E49B25AA6B2E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{05D59232-7331-42C5-8CFA-953FFD19651C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{05D59232-7331-42C5-8CFA-953FFD19651C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{05D59232-7331-42C5-8CFA-953FFD19651C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{05D59232-7331-42C5-8CFA-953FFD19651C}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
