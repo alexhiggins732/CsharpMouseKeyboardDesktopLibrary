@@ -16,7 +16,7 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 using MouseKeyboardEvents;
 using MouseKeyboardLibrary;
-
+using Newtonsoft.Json;
 
 namespace DesktopStream
 {
@@ -105,6 +105,9 @@ namespace DesktopStream
 
             byte[] bytes = null;
             var fps = 1000 / 12.0;
+            var bounds = Screen.PrimaryScreen.Bounds;
+            var boundsJson = JsonConvert.SerializeObject(new { bounds.Width, bounds.Height });
+            session.Send(boundsJson);
             while (running && session.Connected)
             {
 
