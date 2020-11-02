@@ -15,6 +15,8 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using MouseKeyboardEvents;
+using MouseKeyboardLibrary;
+
 namespace DesktopStream
 {
     /// <summary>
@@ -95,6 +97,8 @@ namespace DesktopStream
             Console.ReadKey();
         }
 
+        //private readonly KeyboardHook keyboardHook = new KeyboardHook();
+        //private readonly MouseHook mouseHook = new MouseHook();
         private static void AppServer_NewSessionConnected(WebSocketSession session)
         {
 
@@ -131,7 +135,56 @@ namespace DesktopStream
         {
             //Send the received message back
             var browserEvent = BrowserEventFactory.Parse(message);
+            processEvent(browserEvent);
             session.Send("Server: " + message);
+        }
+
+        //todo:
+        static double ScaleX = 1;
+        static double ScaleY = 1;
+        static void processEvent(MouseKeyEvent browserEvent)
+        {
+            switch (browserEvent.MacroEventType)
+            {
+                case MouseKeyEventType.MouseMove:
+                    {
+                        var mouseArgs = (MouseEventArgs)browserEvent.MouseArgs;
+                        MouseSimulator.X = (int)(mouseArgs.X / ScaleX);
+                        MouseSimulator.Y = (int)(mouseArgs.Y / ScaleY);
+                    }
+                    break;
+                case MouseKeyEventType.MouseDown:
+                    {
+                        var mouseArgs = (MouseEventArgs)browserEvent.MouseArgs;
+                        MouseSimulator.MouseDown(mouseArgs.Button);
+                    }
+                    break;
+                case MouseKeyEventType.MouseUp:
+                    {
+                        var mouseArgs = (MouseEventArgs)browserEvent.MouseArgs;
+                        MouseSimulator.MouseUp(mouseArgs.Button);
+                    }
+                    break;
+                case MouseKeyEventType.MouseWheel:
+                    {
+                        var mouseArgs = (MouseEventArgs)browserEvent.MouseArgs;
+                        MouseSimulator.MouseWheel(mouseArgs.Delta);
+                    }
+                    break;
+                case MouseKeyEventType.KeyDown:
+                    {
+                        var keyArgs = (KeyEventArgs)browserEvent.KeyArgs;
+
+                        KeyboardSimulator.KeyDown(keyArgs.KeyCode);
+                    }
+                    break;
+                case MouseKeyEventType.KeyUp:
+                    {
+                        var keyArgs = (KeyEventArgs)browserEvent.KeyArgs;
+                        KeyboardSimulator.KeyUp(keyArgs.KeyCode);
+                    }
+                    break;
+            }
         }
     }
 
