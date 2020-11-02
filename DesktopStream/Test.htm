@@ -4,6 +4,7 @@
     <title>Test</title>
     <script type="text/javascript" src="jquery.js"></script>
     <script type="text/javascript" src="jquery.mousewheel.min.js"></script>
+    <script src="mousekeyEvent.js"></script>
     <script type="text/javascript">
         var noSupportMessage = "Your browser cannot support WebSocket!";
         var ws;
@@ -100,14 +101,15 @@
         function sendEventMesage(eventJson) {
             if (ws) {
                 //var messageBox = document.getElementById('messageInput');
-                //ws.send(eventJson);
+          
                 //messageBox.value = "";
-                console.log(eventJson);
+                //console.log(eventJson);
+                ws.send(eventJson);
             }
         }
 
         function sendCompactEvent(event) {
-            var data = getCompactEventData(event);
+            var data = getMouseKeyEventData(event);
             var message = {};
             message.Type = 0;
             message.Payload = data;
@@ -133,17 +135,21 @@
             canvas = document.getElementById('canvas');
             ctx = canvas.getContext('2d');
             urlCreator = window.URL || window.webkitURL;
-            //$(document).mousemove((e) => onMouseMove(e));
-            //$(document).mousedown((e) => onMouseDown(e));
-            //$(document).mouseup((e) => onMouseUp(e));
-            //window.addEventListener("wheel", event => onMouseWheel(event));
+            $(document).mousemove((e) => onMouseMove(e));
+            $(document).mousedown((e) => onMouseDown(e));
+            $(document).mouseup((e) => onMouseUp(e));
+            window.addEventListener("wheel", event => onMouseWheel(event));
             $(document).keydown((e) => onKeyDown(e));
-            //$(document).onKeyUp((e) => onKeyUp(e));
+            $(document).keyup((e) => onKeyUp(e));
 
 
         }
 
+        var eventX;
+        var eventY;
         function onKeyDown(e) {
+            //eventX = e.pageX;
+            //eventY = e.pageY;
             $('#keyX').val(e.pageX);
             $('#keyY').val(e.pageY);
             $('#keyEventName').val(e.type);
@@ -151,6 +157,8 @@
             sendCompactEvent(e);
         }
         function onKeyUp(e) {
+            //eventX = e.pageX;
+            //eventY = e.pageY;
             $('#keyX').val(e.pageX);
             $('#keyY').val(e.pageY);
             $('#keyEventName').val(e.type);
@@ -158,6 +166,8 @@
             sendCompactEvent(e);
         }
         function onMouseMove(e) {
+            eventX = e.pageX;
+            eventY = e.pageY;
             $('#mouseX').val(e.pageX);
             $('#mouseY').val(e.pageY);
             $('#mouseEventName').val(e.type);
@@ -165,6 +175,8 @@
             sendCompactEvent(e);
         }
         function onMouseDown(e) {
+            eventX = e.pageX;
+            eventY = e.pageY;
             $('#mouseX').val(e.pageX);
             $('#mouseY').val(e.pageY);
             $('#mouseEventName').val(e.type);
@@ -172,6 +184,8 @@
             sendCompactEvent(e);
         }
         function onMouseUp(e) {
+            eventX = e.pageX;
+            eventY = e.pageY;
             $('#mouseX').val(e.pageX);
             $('#mouseY').val(e.pageY);
             $('#mouseEventName').val(e.type);
@@ -179,6 +193,7 @@
             sendCompactEvent(e);
         }
         function onMouseWheel(e) {
+
             $('#mouseX').val(e.wheelDeltaX);
             $('#mouseY').val(e.wheelDeltaY);
             $('#mouseEventName').val(e.type);
@@ -190,7 +205,7 @@
     </script>
 </head>
 <body>
-    <input type="text" id="host" value="localhost" /> <input type="text" id="port" value="`2012" />
+    <input type="text" id="host" value="192.168.1.170" /> <input type="text" id="port" value="2012" />
     <input type="button" id="connectButton" value="Connect" onclick="connectWebSocket()" />
     <input type="button" id="disconnectButton" value="Disconnect" onclick="disconnectWebSocket()" />
     <input type="text" id="messageInput" /> <input type="button" id="sendButton" value="Send" onclick="sendMessage()" />
