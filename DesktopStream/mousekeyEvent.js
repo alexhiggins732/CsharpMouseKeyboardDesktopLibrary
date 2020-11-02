@@ -15,8 +15,8 @@ function getMouseKeyEventData(event) {
     {
         eventData = getMouseEventData(eventType, event);
     }
-    var word1 = (eventType & ~7) | (TimeSinceLastEvent << 3);
-    return [word1, word2];
+    var word1 = (eventType)| (TimeSinceLastEvent << 3);
+    return [word1, eventData];
 }
 
 
@@ -40,8 +40,10 @@ var locationMask = 0x3FFF; // (1 << 14) - 1; 16383;
 var yOffset = 14;
 var buttonDataOffset = 28;
 function getMouseEventData(eventType, event) {
-    var xData = event.pageX; // if needed & locationMask; // bits 0-13
-    var yData = event.pageY << yOffset; //(mouseEvent.Y & locationMask) << yOffset;// bits 14-27;
+
+
+    var xData = eventX;// -> key strokes don't capture event.pageX; // if needed & locationMask; // bits 0-13
+    var yData = eventY << yOffset; //key strokes dont' caputer event.pageY << yOffset; //(mouseEvent.Y & locationMask) << yOffset;// bits 14-27;
     var buttonData = eventType;
     if (eventType == 3) {
         if (event.wheelDeltaY > 0) buttonData == 6;
