@@ -5,35 +5,56 @@
     <script type="text/javascript" src="jquery.js"></script>
     <script type="text/javascript" src="jquery.mousewheel.min.js"></script>
     <script src="mousekeyEvent.js"></script>
+    <style>
+        body {
+            margin: 0px;
+        }
+    </style>
     <script type="text/javascript">
         var noSupportMessage = "Your browser cannot support WebSocket!";
         var ws;
         var canvas;
         var ctx;
         var urlCreator;
+        var canvasBounds = null;
+        var serverWidth = null;
+        var serverHeight = null;
+        var clientWidth = null;
+        var clientHeight = null;
+        var scaleX = null;
+        var scaleY = null;
         function wsMessage(e) {
             if (typeof e.data === "string") {
-                //appendMessage("# " + evt.data + "<br />");
+                if (serverWidth == null || serverHeight == null) {
+                    var desktop = JSON.parse(e.data);
+                    serverWidth = desktop.Width;
+                    serverHeight = desktop.Height;
+                    scaleY = serverWidth / clientWidth;
+                    scaleX = serverHeight / clientHeight;
+                    return;
+                }
+                appendMessage(e.data);
 
             }
             else if (e.data instanceof ArrayBuffer) {
 
             } else if (e.data instanceof Blob) {
                 showBlob(e.data);
-                blob2canvas(e.data);
+                //blob2canvas(e.data);
             }
         }
         function appendMessage(e) {
-            $('#lastMessage').html(e);
+            //$('#lastMessage').html(e);
+            console.log(e);
         }
 
         function blob2canvas(blob) {
             var img = new Image();
             img.onload = function () {
-                if (canvas.width != img.width)
-                    canvas.width = img.width;
-                if (canvas.height != img.height)
-                    canvas.height = img.height;
+                //if (canvas.width != img.width)
+                //    canvas.width = img.width;
+                //if (canvas.height != img.height)
+                //    canvas.height = img.height;
                 ctx.drawImage(img, 0, 0);
             }
             img.src = urlCreator.createObjectURL(blob);// blob;
@@ -58,6 +79,13 @@
             appendMessage("* Connecting to server " + hostUrl + "..<br/>");
             // create a new websocket and connect
 
+            closeSocket = function () {
+                serverWidth = null;
+                serverHeight = null;
+                ws = null;
+                $('#blobImage').hide();
+                $('#controls').fadeIn(1000);
+            }
             ws = new window[support](hostUrl);
 
             // when data is comming from the server, this metod is called
@@ -66,6 +94,7 @@
             }
             ws.onerror = function (event) {
                 console.error("WebSocket error observed:", event);
+                closeSocket();
             };
 
             // when the connection is established, this method is called
@@ -75,6 +104,8 @@
                 $('#sendButton').attr("disabled", "");
                 $('#connectButton').attr("disabled", "disabled");
                 $('#disconnectButton').attr("disabled", "");
+                $('#blogImage').show();
+                $('#controls').hide();
             };
 
             // when the connection is closed, this method is called
@@ -84,6 +115,7 @@
                 $('#sendButton').attr("disabled", "disabled");
                 $('#connectButton').attr("disabled", "");
                 $('#disconnectButton').attr("disabled", "disabled");
+                closeSocket();
             }
         }
 
@@ -101,7 +133,7 @@
         function sendEventMesage(eventJson) {
             if (ws) {
                 //var messageBox = document.getElementById('messageInput');
-          
+
                 //messageBox.value = "";
                 //console.log(eventJson);
                 ws.send(eventJson);
@@ -138,16 +170,35 @@
             $(document).mousemove((e) => onMouseMove(e));
             $(document).mousedown((e) => onMouseDown(e));
             $(document).mouseup((e) => onMouseUp(e));
-            window.addEventListener("wheel", event => onMouseWheel(event));
+            window.addEventListener("wheel", (event) => onMouseWheel(event));
             $(document).keydown((e) => onKeyDown(e));
             $(document).keyup((e) => onKeyUp(e));
+            $(document).mouseup((e) => onMouseUp(e));
 
+            var canvas = document.getElementById("blobImage");
+            canvas.oncontextmenu = function (e) {
+                stopEvent(e);
+            };
+
+            clientHeight = $(window).height();
+            clientWidth = $(window).width();
+            disableScroll();
+            $('#blobImage').css("height", clientHeight);
+
+            //$('#blobImage').css("width", $(window).width());
+            $('body').css('overflow-y', 'hidden');
 
         }
-
+        function stopEvent(event) {
+            if (event.preventDefault != undefined)
+                event.preventDefault();
+            if (event.stopPropagation != undefined)
+                event.stopPropagation();
+        }
         var eventX;
         var eventY;
         function onKeyDown(e) {
+
             //eventX = e.pageX;
             //eventY = e.pageY;
             $('#keyX').val(e.pageX);
@@ -155,6 +206,7 @@
             $('#keyEventName').val(e.type);
             //console.log(e);
             sendCompactEvent(e);
+
         }
         function onKeyUp(e) {
             //eventX = e.pageX;
@@ -180,8 +232,13 @@
             $('#mouseX').val(e.pageX);
             $('#mouseY').val(e.pageY);
             $('#mouseEventName').val(e.type);
+
             //console.log(e);
             sendCompactEvent(e);
+            if (e.button == 2) {
+                e.preventDefault();
+                return false;
+            }
         }
         function onMouseUp(e) {
             eventX = e.pageX;
@@ -191,9 +248,13 @@
             $('#mouseEventName').val(e.type);
             //console.log(e);
             sendCompactEvent(e);
+            if (e.button == 2) {
+                e.preventDefault();
+                return false;
+            }
         }
         function onMouseWheel(e) {
-
+            if (e.srcElement.id == "blobImage") stopEvent(e);
             $('#mouseX').val(e.wheelDeltaX);
             $('#mouseY').val(e.wheelDeltaY);
             $('#mouseEventName').val(e.type);
@@ -201,20 +262,38 @@
             sendCompactEvent(e);
 
         }
+        function disableScroll() {
+            // Get the current page scroll position
+            //scrollTop =
+            //    window.pageYOffset || document.documentElement.scrollTop;
+            //scrollLeft =
+            //    window.pageXOffset || document.documentElement.scrollLeft,
+
+            //    // if any scroll is attempted,
+            //    // set this to the previous value
+            //    window.onscroll = function () {
+            //        window.scrollTo(scrollLeft, scrollTop);
+            //    };
+            //$('body').css('height', $(document).height());
+            //$('body').css('overflow-y', 'hidden');
+        }
 
     </script>
 </head>
 <body>
-    <input type="text" id="host" value="192.168.1.170" /> <input type="text" id="port" value="2012" />
-    <input type="button" id="connectButton" value="Connect" onclick="connectWebSocket()" />
-    <input type="button" id="disconnectButton" value="Disconnect" onclick="disconnectWebSocket()" />
-    <input type="text" id="messageInput" /> <input type="button" id="sendButton" value="Send" onclick="sendMessage()" />
-    X: <input type="text" id="mouseX" value="" /> Y: <input type="text" id="mouseY" value="" /> <input type="text" id="mouseEventName" />
-    X: <input type="text" id="keyX" value="" /> Y: <input type="text" id="keyX" value="" /> <input type="text" id="keyEventName" />
-    <br />
+    <div id="controls">
+        <input type="text" id="host" value="192.168.1.170" /> <input type="text" id="port" value="2012" />
+        <input type="button" id="connectButton" value="Connect" onclick="connectWebSocket()" />
+        <input type="button" id="disconnectButton" value="Disconnect" onclick="disconnectWebSocket()" />
+        <input type="text" id="messageInput" /> <input type="button" id="sendButton" value="Send" onclick="sendMessage()" />
+        X: <input type="text" id="mouseX" value="" /> Y: <input type="text" id="mouseY" value="" /> <input type="text" id="mouseEventName" />
+        X: <input type="text" id="keyX" value="" /> Y: <input type="text" id="keyX" value="" /> <input type="text" id="keyEventName" />
+        <br />
+    </div>
+
+    <img id="blobImage" oncontextmenu="return false;" />
+    <canvas id="canvas" height="500" width="500" oncontextmenu="return false;"></canvas>
     <div id="lastMessage"></div>
-    <img id="blobImage" />
-    <canvas id="canvas" height="500" width="500"></canvas>
 
 </body>
 </html>
