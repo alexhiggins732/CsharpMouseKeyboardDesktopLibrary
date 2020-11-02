@@ -13,18 +13,19 @@
         var urlCreator;
         function wsMessage(e) {
             if (typeof e.data === "string") {
-                //appendMessage("# " + evt.data + "<br />");
+                appendMessage(e.data);
 
             }
             else if (e.data instanceof ArrayBuffer) {
 
             } else if (e.data instanceof Blob) {
                 showBlob(e.data);
-                blob2canvas(e.data);
+                //blob2canvas(e.data);
             }
         }
         function appendMessage(e) {
-            $('#lastMessage').html(e);
+            //$('#lastMessage').html(e);
+            console.log(e);
         }
 
         function blob2canvas(blob) {
@@ -101,7 +102,7 @@
         function sendEventMesage(eventJson) {
             if (ws) {
                 //var messageBox = document.getElementById('messageInput');
-          
+
                 //messageBox.value = "";
                 //console.log(eventJson);
                 ws.send(eventJson);
@@ -141,13 +142,29 @@
             window.addEventListener("wheel", event => onMouseWheel(event));
             $(document).keydown((e) => onKeyDown(e));
             $(document).keyup((e) => onKeyUp(e));
-
+            $(document).mouseup((e) => onMouseUp(e));
+            //$('#canvas').on('oncontextmenu', function (e) {
+            //    var evt = new Object({ keyCode: 93 });
+            //    stopEvent(e);
+            //    keyboardUp(evt);
+            //});
+            //$('body').on('contextmenu', '#canvas', function (e) { return false; });
+            var canvas = document.getElementById("blobImage");
+            canvas.oncontextmenu = function (e) {
+                stopEvent(e);
+            };
 
         }
-
+        function stopEvent(event) {
+            if (event.preventDefault != undefined)
+                event.preventDefault();
+            if (event.stopPropagation != undefined)
+                event.stopPropagation();
+        }
         var eventX;
         var eventY;
         function onKeyDown(e) {
+
             //eventX = e.pageX;
             //eventY = e.pageY;
             $('#keyX').val(e.pageX);
@@ -155,6 +172,7 @@
             $('#keyEventName').val(e.type);
             //console.log(e);
             sendCompactEvent(e);
+
         }
         function onKeyUp(e) {
             //eventX = e.pageX;
@@ -180,8 +198,13 @@
             $('#mouseX').val(e.pageX);
             $('#mouseY').val(e.pageY);
             $('#mouseEventName').val(e.type);
+
             //console.log(e);
             sendCompactEvent(e);
+            if (e.button == 2) {
+                e.preventDefault();
+                return false;
+            }
         }
         function onMouseUp(e) {
             eventX = e.pageX;
@@ -191,6 +214,10 @@
             $('#mouseEventName').val(e.type);
             //console.log(e);
             sendCompactEvent(e);
+            if (e.button == 2) {
+                e.preventDefault();
+                return false;
+            }
         }
         function onMouseWheel(e) {
 
@@ -213,8 +240,8 @@
     X: <input type="text" id="keyX" value="" /> Y: <input type="text" id="keyX" value="" /> <input type="text" id="keyEventName" />
     <br />
     <div id="lastMessage"></div>
-    <img id="blobImage" />
-    <canvas id="canvas" height="500" width="500"></canvas>
+    <img id="blobImage" oncontextmenu="return false;"/>
+    <canvas id="canvas" height="500" width="500" oncontextmenu="return false;"></canvas>
 
 </body>
 </html>
