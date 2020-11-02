@@ -17,6 +17,7 @@ using System.Windows.Forms;
 using MouseKeyboardEvents;
 using MouseKeyboardLibrary;
 
+
 namespace DesktopStream
 {
     /// <summary>
@@ -135,8 +136,52 @@ namespace DesktopStream
         {
             //Send the received message back
             var browserEvent = BrowserEventFactory.Parse(message);
+            var t = browserEvent.GetType().Name;
             processEvent(browserEvent);
-            session.Send("Server: " + message);
+            string result = "";
+            switch (browserEvent.MacroEventType)
+            {
+                case MouseKeyEventType.MouseMove:
+                    {
+                        var mouseArgs = (MouseEventArgs)browserEvent.MouseArgs;
+                        //Console.WriteLine(result = $"MouseMove: {mouseArgs.X} {mouseArgs.Y}");
+                    }
+                    break;
+                case MouseKeyEventType.MouseDown:
+                    {
+                        var mouseArgs = (MouseEventArgs)browserEvent.MouseArgs;
+                        Console.WriteLine(result = $"MouseDown({mouseArgs.Button}): {mouseArgs.X} {mouseArgs.Y}");
+                    }
+                    break;
+                case MouseKeyEventType.MouseUp:
+                    {
+                        var mouseArgs = (MouseEventArgs)browserEvent.MouseArgs;
+                        Console.WriteLine(result = $"MouseUp({mouseArgs.Button}): {mouseArgs.X} {mouseArgs.Y}");
+                    }
+                    break;
+                case MouseKeyEventType.MouseWheel:
+                    {
+                        var mouseArgs = (MouseEventArgs)browserEvent.MouseArgs;
+                        Console.WriteLine(result = $"MouseWheel: {mouseArgs.Delta}");
+                    }
+                    break;
+                case MouseKeyEventType.KeyDown:
+                    {
+                        var keyArgs = (KeyEventArgs)browserEvent.KeyArgs;
+                        Console.WriteLine(result = $"KeyDown: {keyArgs.KeyCode}");
+                    }
+                    break;
+                case MouseKeyEventType.KeyUp:
+                    {
+                        var keyArgs = (KeyEventArgs)browserEvent.KeyArgs;
+                        Console.WriteLine(result = $"KeyUp: {keyArgs.KeyCode}");
+                    }
+                    break;
+            }
+            //var json = JsonConvert.SerializeObject(browserEvent, Formatting.Indented);
+            //Console.WriteLine(json);
+            if (!string.IsNullOrEmpty(result))
+                session.Send("Server: " + result);
         }
 
         //todo:
