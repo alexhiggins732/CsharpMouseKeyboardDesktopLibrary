@@ -10,7 +10,7 @@
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>GlobalMacroRecorder</RootNamespace>
     <AssemblyName>GlobalMacroRecorder</AssemblyName>
-    <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.6.1</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <FileUpgradeFlags>
     </FileUpgradeFlags>
@@ -67,10 +67,18 @@
     <Reference Include="System.Core">
       <RequiredTargetFramework>3.5</RequiredTargetFramework>
     </Reference>
+    <Reference Include="System.Data" />
     <Reference Include="System.Drawing" />
     <Reference Include="System.Windows.Forms" />
+    <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="RectangleSelect.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="RectangleSelect.Designer.cs">
+      <DependentUpon>RectangleSelect.cs</DependentUpon>
+    </Compile>
     <Compile Include="Resources\Constants.cs" />
     <Compile Include="Resources\GlobalHotkey.cs" />
     <Compile Include="MacroForm.cs">
@@ -83,6 +91,8 @@
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="ScreenRecorder.cs" />
+    <Compile Include="StillMovieMaker.cs" />
+    <Compile Include="TimedFrameWriter.cs" />
     <EmbeddedResource Include="MacroForm.resx">
       <DependentUpon>MacroForm.cs</DependentUpon>
       <SubType>Designer</SubType>
@@ -97,6 +107,9 @@
       <DependentUpon>Resources.resx</DependentUpon>
       <DesignTime>True</DesignTime>
     </Compile>
+    <EmbeddedResource Include="RectangleSelect.resx">
+      <DependentUpon>RectangleSelect.cs</DependentUpon>
+    </EmbeddedResource>
     <None Include="app.config" />
     <None Include="packages.config" />
     <None Include="Resources\app.config" />

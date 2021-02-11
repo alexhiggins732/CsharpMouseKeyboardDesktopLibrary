@@ -40,8 +40,11 @@ namespace GlobalMacroRecorder
             ghk = new GlobalHotkey(Constants.ESC, Keys.Escape, this);
             hotkeymessage = false;
             foreverloopmessage = false;
+            this.Hidewindow.Checked = true;
+            this.HotkeyActivated.Checked = true;
 
         }
+
 
 
         [DllImport("gdi32.dll")]
@@ -90,6 +93,13 @@ namespace GlobalMacroRecorder
 
         private void HandleHotkey()
         {
+            if (btnRecord.Text == "Stop")
+            {
+                Captura.DesktopRecorder.Stop();
+                btnRecord.Text = "Record";
+                return;
+            }
+
             if (recording)
             {
                 Stopclick();
@@ -336,7 +346,7 @@ namespace GlobalMacroRecorder
             {
                 if (hotkeymessage == false)
                 {
-                    MessageBox.Show(@"The Global Hotkey for this application is 'ESC'. It will stop the recording of keyboard and mouse movements if activated. If you are playing the movements pressing it will stop the playback process. Using this you have the ability to forever loop the movements and drive your friend crazy! Have fun :)");
+                    //MessageBox.Show(@"The Global Hotkey for this application is 'ESC'. It will stop the recording of keyboard and mouse movements if activated. If you are playing the movements pressing it will stop the playback process. Using this you have the ability to forever loop the movements and drive your friend crazy! Have fun :)");
                     hotkeymessage = true;
                 }
                 ForeverLoop.Visible = true;
@@ -388,11 +398,21 @@ namespace GlobalMacroRecorder
 
         private void btnRecord_Click(object sender, EventArgs e)
         {
+            if (Hidewindow.Checked)
+            {
+                this.WindowState = FormWindowState.Minimized;
+            }
             if (btnRecord.Text == "Record")
             {
                 var fileName = DateTime.Now.ToString("out-yyyy-MM-dd_hh-mm-ss.avi");
-                Captura.DesktopRecorder.Start(fileName, this.ScaleX);
+                var rect = new Rectangle(0, 0, Screen.PrimaryScreen.Bounds.Width, Screen.PrimaryScreen.Bounds.Height);
+                if (selectionRectangle != Rectangle.Empty)
+                {
+                    rect = selectionRectangle;
+                }
+                Captura.DesktopRecorder.Start(fileName, this.ScaleX, frameRate: (int)nmFPS.Value, quality:(int)nmQlty.Value, area: rect);
                 btnRecord.Text = "Stop";
+                lblStartTime.Text = $"Start: {DateTime.Now}";
             }
             else
             {
@@ -400,6 +420,36 @@ namespace GlobalMacroRecorder
                 btnRecord.Text = "Record";
 
             }
+        }
+
+        RectangleSelect select;
+        private void btnSelect_Click(object sender, EventArgs e)
+        {
+            if (select == null)
+            {
+                select = new RectangleSelect();
+                if (selectionRectangle != null)
+                {
+                    //select.Location = lastFormLocation;
+                }
+                select.FormClosing += Sel_FormClosing;
+                select.Show();
+
+            }
+
+        }
+
+        Rectangle selectionRectangle;
+        Point lastFormLocation;
+        private void Sel_FormClosing(object sender, FormClosingEventArgs e)
+        {
+            if (select.SelectedArea)
+            {
+                lastFormLocation = select.Location;
+                var offsetLocation = new Point(select.Location.X + 7, select.Location.Y + select.TitleHeight);
+                selectionRectangle = new Rectangle(offsetLocation, select.Size);
+            }
+            select = null;
         }
     }
 }

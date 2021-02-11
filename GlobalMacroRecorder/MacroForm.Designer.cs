@@ -43,14 +43,21 @@
             this.SaveMacro = new System.Windows.Forms.CheckBox();
             this.btnPlayJson = new System.Windows.Forms.Button();
             this.btnRecord = new System.Windows.Forms.Button();
+            this.nmFPS = new System.Windows.Forms.NumericUpDown();
+            this.label3 = new System.Windows.Forms.Label();
+            this.btnSelect = new System.Windows.Forms.Button();
+            this.label4 = new System.Windows.Forms.Label();
+            this.nmQlty = new System.Windows.Forms.NumericUpDown();
+            this.lblStartTime = new System.Windows.Forms.Label();
+            ((System.ComponentModel.ISupportInitialize)(this.nmFPS)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.nmQlty)).BeginInit();
             this.SuspendLayout();
             // 
             // recordStartButton
             // 
-            this.recordStartButton.Location = new System.Drawing.Point(216, 8);
-            this.recordStartButton.Margin = new System.Windows.Forms.Padding(6);
+            this.recordStartButton.Location = new System.Drawing.Point(108, 4);
             this.recordStartButton.Name = "recordStartButton";
-            this.recordStartButton.Size = new System.Drawing.Size(192, 44);
+            this.recordStartButton.Size = new System.Drawing.Size(96, 23);
             this.recordStartButton.TabIndex = 0;
             this.recordStartButton.Text = "Start";
             this.recordStartButton.UseVisualStyleBackColor = true;
@@ -59,10 +66,9 @@
             // recordStopButton
             // 
             this.recordStopButton.Enabled = false;
-            this.recordStopButton.Location = new System.Drawing.Point(414, 8);
-            this.recordStopButton.Margin = new System.Windows.Forms.Padding(6);
+            this.recordStopButton.Location = new System.Drawing.Point(207, 4);
             this.recordStopButton.Name = "recordStopButton";
-            this.recordStopButton.Size = new System.Drawing.Size(204, 44);
+            this.recordStopButton.Size = new System.Drawing.Size(102, 23);
             this.recordStopButton.TabIndex = 0;
             this.recordStopButton.Text = "Stop";
             this.recordStopButton.UseVisualStyleBackColor = true;
@@ -70,10 +76,9 @@
             // 
             // playBackMacroButton
             // 
-            this.playBackMacroButton.Location = new System.Drawing.Point(216, 63);
-            this.playBackMacroButton.Margin = new System.Windows.Forms.Padding(6);
+            this.playBackMacroButton.Location = new System.Drawing.Point(108, 33);
             this.playBackMacroButton.Name = "playBackMacroButton";
-            this.playBackMacroButton.Size = new System.Drawing.Size(402, 48);
+            this.playBackMacroButton.Size = new System.Drawing.Size(201, 25);
             this.playBackMacroButton.TabIndex = 1;
             this.playBackMacroButton.Text = "Play Back";
             this.playBackMacroButton.UseVisualStyleBackColor = true;
@@ -82,20 +87,18 @@
             // label1
             // 
             this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(18, 17);
-            this.label1.Margin = new System.Windows.Forms.Padding(6, 0, 6, 0);
+            this.label1.Location = new System.Drawing.Point(9, 9);
             this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(153, 25);
+            this.label1.Size = new System.Drawing.Size(78, 13);
             this.label1.TabIndex = 2;
             this.label1.Text = "Record Macro:";
             // 
             // label2
             // 
             this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(18, 75);
-            this.label2.Margin = new System.Windows.Forms.Padding(6, 0, 6, 0);
+            this.label2.Location = new System.Drawing.Point(9, 39);
             this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(172, 25);
+            this.label2.Size = new System.Drawing.Size(87, 13);
             this.label2.TabIndex = 2;
             this.label2.Text = "Playback Macro:";
             // 
@@ -109,20 +112,18 @@
             // 
             // progressBar1
             // 
-            this.progressBar1.Location = new System.Drawing.Point(0, 240);
-            this.progressBar1.Margin = new System.Windows.Forms.Padding(6);
+            this.progressBar1.Location = new System.Drawing.Point(2, 130);
             this.progressBar1.Name = "progressBar1";
-            this.progressBar1.Size = new System.Drawing.Size(652, 23);
+            this.progressBar1.Size = new System.Drawing.Size(326, 12);
             this.progressBar1.TabIndex = 3;
             this.progressBar1.Visible = false;
             // 
             // Hidewindow
             // 
             this.Hidewindow.AutoSize = true;
-            this.Hidewindow.Location = new System.Drawing.Point(24, 123);
-            this.Hidewindow.Margin = new System.Windows.Forms.Padding(6);
+            this.Hidewindow.Location = new System.Drawing.Point(12, 64);
             this.Hidewindow.Name = "Hidewindow";
-            this.Hidewindow.Size = new System.Drawing.Size(170, 29);
+            this.Hidewindow.Size = new System.Drawing.Size(90, 17);
             this.Hidewindow.TabIndex = 4;
             this.Hidewindow.Text = "Hide Window";
             this.Hidewindow.UseVisualStyleBackColor = true;
@@ -130,10 +131,9 @@
             // stoponselect
             // 
             this.stoponselect.AutoSize = true;
-            this.stoponselect.Location = new System.Drawing.Point(216, 123);
-            this.stoponselect.Margin = new System.Windows.Forms.Padding(6);
+            this.stoponselect.Location = new System.Drawing.Point(108, 64);
             this.stoponselect.Name = "stoponselect";
-            this.stoponselect.Size = new System.Drawing.Size(184, 29);
+            this.stoponselect.Size = new System.Drawing.Size(96, 17);
             this.stoponselect.TabIndex = 5;
             this.stoponselect.Text = "Stop on Select";
             this.stoponselect.UseVisualStyleBackColor = true;
@@ -141,10 +141,9 @@
             // HotkeyActivated
             // 
             this.HotkeyActivated.AutoSize = true;
-            this.HotkeyActivated.Location = new System.Drawing.Point(414, 123);
-            this.HotkeyActivated.Margin = new System.Windows.Forms.Padding(6);
+            this.HotkeyActivated.Location = new System.Drawing.Point(207, 64);
             this.HotkeyActivated.Name = "HotkeyActivated";
-            this.HotkeyActivated.Size = new System.Drawing.Size(211, 29);
+            this.HotkeyActivated.Size = new System.Drawing.Size(110, 17);
             this.HotkeyActivated.TabIndex = 7;
             this.HotkeyActivated.Text = "Hotkey Activation";
             this.HotkeyActivated.UseVisualStyleBackColor = true;
@@ -153,10 +152,9 @@
             // ForeverLoop
             // 
             this.ForeverLoop.AutoSize = true;
-            this.ForeverLoop.Location = new System.Drawing.Point(414, 167);
-            this.ForeverLoop.Margin = new System.Windows.Forms.Padding(6);
+            this.ForeverLoop.Location = new System.Drawing.Point(207, 87);
             this.ForeverLoop.Name = "ForeverLoop";
-            this.ForeverLoop.Size = new System.Drawing.Size(172, 29);
+            this.ForeverLoop.Size = new System.Drawing.Size(89, 17);
             this.ForeverLoop.TabIndex = 8;
             this.ForeverLoop.Text = "Forever Loop";
             this.ForeverLoop.UseVisualStyleBackColor = true;
@@ -168,20 +166,18 @@
             this.SaveMacro.AutoSize = true;
             this.SaveMacro.Checked = true;
             this.SaveMacro.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.SaveMacro.Location = new System.Drawing.Point(24, 164);
-            this.SaveMacro.Margin = new System.Windows.Forms.Padding(6);
+            this.SaveMacro.Location = new System.Drawing.Point(12, 85);
             this.SaveMacro.Name = "SaveMacro";
-            this.SaveMacro.Size = new System.Drawing.Size(93, 29);
+            this.SaveMacro.Size = new System.Drawing.Size(51, 17);
             this.SaveMacro.TabIndex = 9;
             this.SaveMacro.Text = "Save";
             this.SaveMacro.UseVisualStyleBackColor = true;
             // 
             // btnPlayJson
             // 
-            this.btnPlayJson.Location = new System.Drawing.Point(208, 155);
-            this.btnPlayJson.Margin = new System.Windows.Forms.Padding(6);
+            this.btnPlayJson.Location = new System.Drawing.Point(104, 81);
             this.btnPlayJson.Name = "btnPlayJson";
-            this.btnPlayJson.Size = new System.Drawing.Size(192, 44);
+            this.btnPlayJson.Size = new System.Drawing.Size(96, 23);
             this.btnPlayJson.TabIndex = 10;
             this.btnPlayJson.Text = "PlayJson";
             this.btnPlayJson.UseVisualStyleBackColor = true;
@@ -189,19 +185,87 @@
             // 
             // btnRecord
             // 
-            this.btnRecord.Location = new System.Drawing.Point(640, 12);
+            this.btnRecord.Location = new System.Drawing.Point(320, 6);
+            this.btnRecord.Margin = new System.Windows.Forms.Padding(2);
             this.btnRecord.Name = "btnRecord";
-            this.btnRecord.Size = new System.Drawing.Size(176, 55);
+            this.btnRecord.Size = new System.Drawing.Size(88, 29);
             this.btnRecord.TabIndex = 11;
             this.btnRecord.Text = "Record";
             this.btnRecord.UseVisualStyleBackColor = true;
             this.btnRecord.Click += new System.EventHandler(this.btnRecord_Click);
             // 
+            // nmFPS
+            // 
+            this.nmFPS.Location = new System.Drawing.Point(359, 63);
+            this.nmFPS.Name = "nmFPS";
+            this.nmFPS.Size = new System.Drawing.Size(80, 20);
+            this.nmFPS.TabIndex = 12;
+            this.nmFPS.Value = new decimal(new int[] {
+            4,
+            0,
+            0,
+            0});
+            // 
+            // label3
+            // 
+            this.label3.AutoSize = true;
+            this.label3.Location = new System.Drawing.Point(323, 65);
+            this.label3.Name = "label3";
+            this.label3.Size = new System.Drawing.Size(30, 13);
+            this.label3.TabIndex = 13;
+            this.label3.Text = "FPS:";
+            // 
+            // btnSelect
+            // 
+            this.btnSelect.Location = new System.Drawing.Point(359, 89);
+            this.btnSelect.Name = "btnSelect";
+            this.btnSelect.Size = new System.Drawing.Size(75, 23);
+            this.btnSelect.TabIndex = 14;
+            this.btnSelect.Text = "Select Rect";
+            this.btnSelect.UseVisualStyleBackColor = true;
+            this.btnSelect.Click += new System.EventHandler(this.btnSelect_Click);
+            // 
+            // label4
+            // 
+            this.label4.AutoSize = true;
+            this.label4.Location = new System.Drawing.Point(323, 42);
+            this.label4.Name = "label4";
+            this.label4.Size = new System.Drawing.Size(31, 13);
+            this.label4.TabIndex = 16;
+            this.label4.Text = "QLT:";
+            // 
+            // nmQlty
+            // 
+            this.nmQlty.Location = new System.Drawing.Point(359, 40);
+            this.nmQlty.Name = "nmQlty";
+            this.nmQlty.Size = new System.Drawing.Size(80, 20);
+            this.nmQlty.TabIndex = 15;
+            this.nmQlty.Value = new decimal(new int[] {
+            25,
+            0,
+            0,
+            0});
+            // 
+            // lblStartTime
+            // 
+            this.lblStartTime.AutoSize = true;
+            this.lblStartTime.Location = new System.Drawing.Point(105, 107);
+            this.lblStartTime.Name = "lblStartTime";
+            this.lblStartTime.Size = new System.Drawing.Size(93, 13);
+            this.lblStartTime.TabIndex = 17;
+            this.lblStartTime.Text = "Record Start Time";
+            // 
             // MacroForm
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(12F, 25F);
+            this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(917, 282);
+            this.ClientSize = new System.Drawing.Size(458, 170);
+            this.Controls.Add(this.lblStartTime);
+            this.Controls.Add(this.label4);
+            this.Controls.Add(this.nmQlty);
+            this.Controls.Add(this.btnSelect);
+            this.Controls.Add(this.label3);
+            this.Controls.Add(this.nmFPS);
             this.Controls.Add(this.btnRecord);
             this.Controls.Add(this.btnPlayJson);
             this.Controls.Add(this.SaveMacro);
@@ -217,12 +281,13 @@
             this.Controls.Add(this.recordStartButton);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.SizableToolWindow;
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
-            this.Margin = new System.Windows.Forms.Padding(6);
             this.MaximizeBox = false;
             this.Name = "MacroForm";
             this.Text = "Global Macro Recorder Example";
             this.Click += new System.EventHandler(this.MacroForm_Click);
             this.MouseClick += new System.Windows.Forms.MouseEventHandler(this.MacroForm_MouseClick);
+            ((System.ComponentModel.ISupportInitialize)(this.nmFPS)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.nmQlty)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -244,6 +309,12 @@
         private System.Windows.Forms.CheckBox SaveMacro;
         private System.Windows.Forms.Button btnPlayJson;
         private System.Windows.Forms.Button btnRecord;
+        private System.Windows.Forms.NumericUpDown nmFPS;
+        private System.Windows.Forms.Label label3;
+        private System.Windows.Forms.Button btnSelect;
+        private System.Windows.Forms.Label label4;
+        private System.Windows.Forms.NumericUpDown nmQlty;
+        private System.Windows.Forms.Label lblStartTime;
     }
 }
 
