@@ -26,7 +26,7 @@ namespace Captura
         static FourCC defaultCodec = SharpAvi.KnownFourCCs.Codecs.MotionJpeg;
         public static void Start(string fileName, double scale, FourCC? codec = null, int frameRate = 25, int quality = 25, Rectangle area = default(Rectangle))
         {
-            if (area== default(Rectangle))
+            if (area == default(Rectangle))
             {
                 area = new Rectangle(0, 0, Screen.PrimaryScreen.Bounds.Width, Screen.PrimaryScreen.Bounds.Height);
             }
@@ -183,25 +183,38 @@ namespace Captura
             var buffer = new byte[Params.Width * Params.Height * 4];
             var timeTillNextFrame = TimeSpan.Zero;
             Control.CheckForIllegalCrossThreadCalls = false;
-            using (var writer = Params.CreateAviWriter())
+            
+            bool creatingNewFile = false;
+            while (!closed)
             {
-                var frameInterval = TimeSpan.FromSeconds(1 / (double)writer.FramesPerSecond);
-                var videoStream = Params.CreateVideoStream(writer);
-                videoStream.Name = "Captura";
-                var timedWriter = new TimedFrameWriter(videoStream, writer, Params);
-                while (!stopThread.WaitOne(timeTillNextFrame))
+                creatingNewFile = false;
+                var startDate = DateTime.Now;
+                using (var writer = Params.CreateAviWriter())
                 {
-                    var timestamp = DateTime.Now;
-                    Screenshot(buffer);
-                    //videoStream.WriteFrame(true, buffer, 0, buffer.Length);
-                    timedWriter.WriteFrame(true, buffer, 0, buffer.Length);
-                    timeTillNextFrame = timestamp + frameInterval - DateTime.Now;
-                    if (timeTillNextFrame < TimeSpan.Zero)
-                        timeTillNextFrame = TimeSpan.Zero;
+                    var frameInterval = TimeSpan.FromSeconds(1 / (double)writer.FramesPerSecond);
+                    var videoStream = Params.CreateVideoStream(writer);
+                    videoStream.Name = "Captura";
+                    var timedWriter = new TimedFrameWriter(videoStream, writer, Params);
+                    while (!stopThread.WaitOne(timeTillNextFrame) && !creatingNewFile)
+                    {
+                        var timestamp = DateTime.Now;
+                        Screenshot(buffer);
+                        //videoStream.WriteFrame(true, buffer, 0, buffer.Length);
+                        timedWriter.WriteFrame(true, buffer, 0, buffer.Length);
+                        timeTillNextFrame = timestamp + frameInterval - DateTime.Now;
+                        if (timeTillNextFrame < TimeSpan.Zero)
+                            timeTillNextFrame = TimeSpan.Zero;
+                        if (DateTime.Now.Subtract(startDate).Hours == 1)
+                        {
+                            creatingNewFile = true;
+                        }
+                    }
+                    writer.Close();
+                    if (!creatingNewFile)
+                    {
+                        closed = true;
+                    }
                 }
-
-                writer.Close();
-                closed = true;
             }
         }
 
