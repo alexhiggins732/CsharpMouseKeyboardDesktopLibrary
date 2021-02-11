@@ -17,6 +17,11 @@ using System.Windows.Forms;
 using MouseKeyboardEvents;
 using MouseKeyboardLibrary;
 using Newtonsoft.Json;
+using System.IO.Ports;
+using System.Diagnostics;
+using System.Timers;
+using System.Diagnostics.Contracts;
+using System.Collections.Concurrent;
 
 namespace DesktopStream
 {
@@ -41,7 +46,7 @@ namespace DesktopStream
 
         static void Main(string[] args)
         {
-
+            //TestRender();
             if (args.Length != 0)
             {
                 Console.WriteLine("Exectuing as interactive");
@@ -98,40 +103,182 @@ namespace DesktopStream
             Console.ReadKey();
         }
 
-        //private readonly KeyboardHook keyboardHook = new KeyboardHook();
-        //private readonly MouseHook mouseHook = new MouseHook();
+        private static void TestRender()
+        {
+            int ticks = 0;
+            int frames = 0;
+            long renderedBytes = 0;
+            var t = new System.Timers.Timer();
+            var fps = 1000 / 14.0;
+            t.Interval = fps;
+            t.Elapsed += (sender, e) =>
+            {
+                ticks++;
+                var bytes = ScreenShotUtility.TakeScreenshot();
+                frames++;
+                var segment = new ArraySegment<byte>(bytes);
+                renderedBytes += (long)segment.Count;
+            };
+            var sw = Stopwatch.StartNew();
+            t.Start();
+            while (bool.Parse(bool.TrueString))
+            {
+                System.Threading.Thread.Sleep(1000);
+                Console.WriteLine($"[{DateTime.Now}] Ticks: {ticks} Frames: {frames} bytes: {renderedBytes} Elapsed: {sw.Elapsed}");
+            }
+        }
+
         private static void AppServer_NewSessionConnected(WebSocketSession session)
         {
 
+
             byte[] bytes = null;
-            var fps = 1000 / 12.0;
+            var fps = 1000 / 24;
             var bounds = Screen.PrimaryScreen.Bounds;
             var boundsJson = JsonConvert.SerializeObject(new { bounds.Width, bounds.Height });
             session.Send(boundsJson);
-            while (running && session.Connected)
+            var latest = DateTime.MinValue;
+
+            int ticks = 0;
+            int frames = 0;
+            int sent = 0;
+            int failed = 0;
+            //long renderedBytes = 0;
+            //long sentBytes = 0, failed = 0;
+            var sw = Stopwatch.StartNew();
+            var logTimer = new System.Timers.Timer();
+            logTimer.Interval = 1000;
+            logTimer.Elapsed += (sender, e) =>
+             {
+                 Console.WriteLine($"[{DateTime.Now}] Ticks: {ticks} Frames: {frames}  Sent: {sent} Failed: {failed} Elapsed: {sw.Elapsed}");
+             };
+
+            var tickTimer = new System.Timers.Timer();
+            tickTimer.Interval = fps;
+            tickTimer.Elapsed += (sender, e) => ticks++;
+
+
+            var queue = new ConcurrentQueue<byte[]>();
+            var renderTimer = new System.Timers.Timer();
+            renderTimer.Interval = fps;
+            renderTimer.Elapsed += (sender, e) =>
             {
+                if (running && session.Connected)
+                {
+                    queue.Enqueue(ScreenShotUtility.TakeScreenshot());
+                    frames++;
+                }
+            };
+            renderTimer.Start();
 
-                DateTime start = DateTime.Now;
-                fps = 1000.0 / 8;
-                //bytes = util.TakeScreenShot(); // ScreenShotUtility.TakeScreenshot();
-
+            bool serving = false;
+            var serveTimer = new System.Timers.Timer();
+            serveTimer.Interval = fps;
+            serveTimer.Elapsed += (sender, e) =>
+            {
+                if (serving) return;
+                serving = true;
+                byte[] result = null;
+                var skipped = -1;
+                while (queue.Count > 0)
+                {
+                    queue.TryDequeue(out result);
+                    skipped++;
+                }
+                failed += skipped;
                 try
                 {
-                    bytes = ScreenShotUtility.TakeScreenshot();
-                    var segment = new ArraySegment<byte>(bytes);
-                    session.Send(segment);
+                    session.Send(result, 0, result.Length);
+                    sent++;
                 }
-                catch (Exception ex)
+                catch
                 {
-                    Console.WriteLine(ex.ToString());
-                    session.Send(ex.Message);
+                    failed++;
                 }
+                serving = false;
+            };
 
-                var diff = DateTime.Now.Subtract(start).TotalMilliseconds;
-                var sleep = Math.Max(0, fps - diff);
-                System.Threading.Thread.Sleep((int)sleep);
-                //session.Close();
+
+            //var renderTimer = new System.Timers.Timer();
+            //renderTimer.Interval = fps;
+            //renderTimer.Elapsed += (sender, e) =>
+            //{
+
+            //    if (running && session.Connected)
+            //    {
+            //        var tickBytes = ScreenShotUtility.TakeScreenshot();
+            //        frames++;
+            //        var segment = new ArraySegment<byte>(tickBytes);
+            //        renderedBytes += segment.Count;
+            //        try
+            //        {
+            //            session.Send(segment);
+            //            sentBytes += segment.Count;
+            //        }
+            //        catch
+            //        {
+            //            failed += segment.Count;
+            //        }
+
+
+            //    }
+            //};
+            renderTimer.Start();
+            serveTimer.Start();
+            logTimer.Start();
+            tickTimer.Start();
+            //renderTimer.Start();
+            while (running && session.Connected)
+            {
+                System.Threading.Thread.Sleep(1);
             }
+            //while (running && session.Connected)
+            //{
+            //    DateTime start = DateTime.Now;
+            //    frames++;
+            //    if (frames <= ticks)
+            //    {
+            //        failed += bytes.Length;
+            //    }
+            //    else
+            //    {
+
+            //        bytes = ScreenShotUtility.TakeScreenshot();
+
+            //        var segment = new ArraySegment<byte>(bytes);
+            //        renderedBytes += segment.Count;
+            //        try
+            //        {
+            //            session.Send(segment);
+            //            sentBytes += segment.Count;
+            //        }
+            //        catch
+            //        {
+            //            failed += segment.Count;
+            //        }
+            //    }
+            //    var diff = DateTime.Now.Subtract(start).TotalMilliseconds;
+            //    var sleep = Math.Max(0, fps - diff);
+            //    System.Threading.Thread.Sleep((int)sleep);
+
+            //}
+
+
+
+
+
+            while (running && session.Connected)
+            {
+                System.Threading.Thread.SpinWait((int)100);
+            }
+            serveTimer.Stop();
+            serveTimer = null;
+            renderTimer.Stop();
+            renderTimer = null;
+            tickTimer.Stop();
+            tickTimer = null;
+            logTimer.Stop();
+            logTimer = null;
 
         }
 
@@ -139,8 +286,9 @@ namespace DesktopStream
         {
             //Send the received message back
             var browserEvent = BrowserEventFactory.Parse(message);
-            var t = browserEvent.GetType().Name;
             processEvent(browserEvent);
+
+#if DEBUG
             string result = "";
             switch (browserEvent.MacroEventType)
             {
@@ -185,7 +333,9 @@ namespace DesktopStream
             //Console.WriteLine(json);
             if (!string.IsNullOrEmpty(result))
                 session.Send("Server: " + result);
+#endif
         }
+
 
         //todo:
         static double ScaleX = 1;
@@ -257,7 +407,7 @@ namespace DesktopStream
             this.CaptureBuffer = new byte[ScaledWidth * ScaledHeight * 4];
             this.ScaledBuffer = new byte[OriginalWidth * OriginalHeight * 4];
         }
-   
+
         [StructLayout(LayoutKind.Sequential)]
         struct CURSORINFO
         {
@@ -335,7 +485,7 @@ namespace DesktopStream
                     }
 
                 }
-          
+
                 if (CaptureMouse)
                 {
                     CURSORINFO pci;
@@ -354,7 +504,7 @@ namespace DesktopStream
                     }
                 }
 
-                bmp.Save(ms, ImageFormat.Png);
+                bmp.Save(ms, ImageFormat.Jpeg);
                 bmp.Dispose();
                 return ms.ToArray();
             }
