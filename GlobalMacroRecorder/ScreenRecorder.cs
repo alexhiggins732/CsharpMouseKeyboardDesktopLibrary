@@ -183,7 +183,7 @@ namespace Captura
             var buffer = new byte[Params.Width * Params.Height * 4];
             var timeTillNextFrame = TimeSpan.Zero;
             Control.CheckForIllegalCrossThreadCalls = false;
-            
+
             bool creatingNewFile = false;
             while (!closed)
             {

@@ -404,7 +404,7 @@ namespace GlobalMacroRecorder
             }
             if (btnRecord.Text == "Record")
             {
-                var fileName = DateTime.Now.ToString("out-yyyy-MM-dd_hh-mm-ss.avi");
+                var fileName = DateTime.Now.ToString("out-yyyy-MM-dd_HH-mm-ss.avi");
                 var rect = new Rectangle(0, 0, Screen.PrimaryScreen.Bounds.Width, Screen.PrimaryScreen.Bounds.Height);
                 if (selectionRectangle != Rectangle.Empty)
                 {
