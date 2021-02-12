@@ -17,6 +17,7 @@ using System.IO;
 using System.Collections.Concurrent;
 using System.Threading.Tasks;
 using GlobalMacroRecorder;
+using System.Configuration;
 
 namespace Captura
 {
@@ -24,7 +25,13 @@ namespace Captura
     {
         static Recorder rec = null;
         static FourCC defaultCodec = SharpAvi.KnownFourCCs.Codecs.MotionJpeg;
-        public static void Start(string fileName, double scale, FourCC? codec = null, int frameRate = 25, int quality = 25, Rectangle area = default(Rectangle))
+        public static void Start(string fileName, 
+            double scale, 
+            FourCC? codec = null,
+            int frameRate = 25, 
+            int quality = 25, 
+            Rectangle area = default(Rectangle), 
+            bool uploadToYT = false)
         {
             if (area == default(Rectangle))
             {
@@ -37,7 +44,7 @@ namespace Captura
             // Using MotionJpeg as Avi encoder,
             // output to 'out.avi' at 10 Frames per second, 70% quality
             //var rec = new Recorder(new RecorderParams("out.avi", 10, SharpAvi.KnownFourCCs.Codecs.MotionJpeg, 70));
-            var recorderParams = new RecorderParams(fileName, scale, frameRate, codec.Value, quality, area);
+            var recorderParams = new RecorderParams(fileName, scale, frameRate, codec.Value, quality, area, uploadToYT);
             rec = new Recorder(recorderParams);
             rec.StartAsync();
         }
@@ -63,7 +70,7 @@ namespace Captura
             Width = (int)(Screen.PrimaryScreen.Bounds.Width * scale);
         }
 
-        public RecorderParams(string filename, double scale, int FrameRate, FourCC Encoder, int Quality, Rectangle area)
+        public RecorderParams(string filename, double scale, int FrameRate, FourCC Encoder, int Quality, Rectangle area, bool uploadToYT)
         {
             FileName = filename;
             FramesPerSecond = FrameRate;
@@ -73,6 +80,7 @@ namespace Captura
             this.Height = area.Height;
             this.Width = area.Width;
             this.Location = area.Location;
+            this.YTUpload = uploadToYT;
             //Height = (int)(Screen.PrimaryScreen.Bounds.Height * scale);
             //Width = (int)(Screen.PrimaryScreen.Bounds.Width * scale);
         }
@@ -87,13 +95,15 @@ namespace Captura
             Width = (int)(width * scale);
         }
 
-        string FileName;
+        public string FileName { get; set; }
         public int FramesPerSecond, Quality;
         FourCC Codec;
 
         public int Height { get; private set; }
         public int Width { get; private set; }
         public Point Location { get; set; }
+        public bool YTUpload { get; private set; }
+
         public AviWriter CreateAviWriter()
         {
             var fs = File.OpenWrite(FileName);
@@ -207,7 +217,7 @@ namespace Captura
                         timeTillNextFrame = timestamp + frameInterval - DateTime.Now;
                         if (timeTillNextFrame < TimeSpan.Zero)
                             timeTillNextFrame = TimeSpan.Zero;
-                        if (DateTime.Now.Subtract(startDate).Hours == 1)
+                        if (DateTime.Now.Subtract(startDate).Minutes == 1)
                         {
                             creatingNewFile = true;
                         }
@@ -217,8 +227,20 @@ namespace Captura
                     {
                         closed = true;
                     }
+                    if (Params.YTUpload)
+                    {
+                        UploadToYouTube(Params.FileName);
+                        Params.FileName  = DateTime.Now.ToString("out-yyyy-MM-dd_HH-mm-ss.avi");
+                    }
                 }
             }
+        }
+
+        private void UploadToYouTube(string fileName)
+        {
+            var uploader = ConfigurationManager.AppSettings["YoutubeUploader"];
+            var videoPath = Path.GetFullPath(fileName);
+            System.Diagnostics.Process.Start(uploader, videoPath);
         }
 
         void RecordScreenOriginal()

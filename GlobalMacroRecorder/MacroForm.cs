@@ -410,7 +410,12 @@ namespace GlobalMacroRecorder
                 {
                     rect = selectionRectangle;
                 }
-                Captura.DesktopRecorder.Start(fileName, this.ScaleX, frameRate: (int)nmFPS.Value, quality:(int)nmQlty.Value, area: rect);
+                Captura.DesktopRecorder.Start(fileName,
+                    this.ScaleX, 
+                    frameRate: (int)nmFPS.Value, quality:
+                    (int)nmQlty.Value, 
+                    area: rect, 
+                    uploadToYT: cbYTUpload.Checked);
                 btnRecord.Text = "Stop";
                 lblStartTime.Text = $"Start: {DateTime.Now}";
             }

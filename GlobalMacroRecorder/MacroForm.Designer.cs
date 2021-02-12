@@ -49,6 +49,7 @@
             this.label4 = new System.Windows.Forms.Label();
             this.nmQlty = new System.Windows.Forms.NumericUpDown();
             this.lblStartTime = new System.Windows.Forms.Label();
+            this.cbYTUpload = new System.Windows.Forms.CheckBox();
             ((System.ComponentModel.ISupportInitialize)(this.nmFPS)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.nmQlty)).BeginInit();
             this.SuspendLayout();
@@ -255,11 +256,24 @@
             this.lblStartTime.TabIndex = 17;
             this.lblStartTime.Text = "Record Start Time";
             // 
+            // cbYTUpload
+            // 
+            this.cbYTUpload.AutoSize = true;
+            this.cbYTUpload.Checked = true;
+            this.cbYTUpload.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.cbYTUpload.Location = new System.Drawing.Point(359, 119);
+            this.cbYTUpload.Name = "cbYTUpload";
+            this.cbYTUpload.Size = new System.Drawing.Size(77, 17);
+            this.cbYTUpload.TabIndex = 18;
+            this.cbYTUpload.Text = "YT Upload";
+            this.cbYTUpload.UseVisualStyleBackColor = true;
+            // 
             // MacroForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(458, 170);
+            this.Controls.Add(this.cbYTUpload);
             this.Controls.Add(this.lblStartTime);
             this.Controls.Add(this.label4);
             this.Controls.Add(this.nmQlty);
@@ -315,6 +329,7 @@
         private System.Windows.Forms.Label label4;
         private System.Windows.Forms.NumericUpDown nmQlty;
         private System.Windows.Forms.Label lblStartTime;
+        private System.Windows.Forms.CheckBox cbYTUpload;
     }
 }
 
