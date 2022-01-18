@@ -27,10 +27,14 @@
             if (typeof e.data === "string") {
                 if (serverWidth == null || serverHeight == null) {
                     var desktop = JSON.parse(e.data);
+
+                    //if(server.) when going into full screen mode. x is larget than clientX and y is larger than client y.
+
                     serverWidth = desktop.Width;
                     serverHeight = desktop.Height;
                     scaleY = serverWidth / clientWidth;
                     scaleX = serverHeight / clientHeight;
+
                     return;
                 }
                 appendMessage(e.data);
@@ -51,10 +55,10 @@
         function blob2canvas(blob) {
             var img = new Image();
             img.onload = function () {
-                //if (canvas.width != img.width)
-                //    canvas.width = img.width;
-                //if (canvas.height != img.height)
-                //    canvas.height = img.height;
+                if (canvas.width != img.width)
+                    canvas.width = img.width;
+                if (canvas.height != img.height)
+                    canvas.height = img.height;
                 ctx.drawImage(img, 0, 0);
             }
             img.src = urlCreator.createObjectURL(blob);// blob;
@@ -131,7 +135,7 @@
             sendEventMesage(eventJson)
         }
         function sendEventMesage(eventJson) {
-            if (ws) {
+            if (ws && ws.readyState==1) {
                 //var messageBox = document.getElementById('messageInput');
 
                 //messageBox.value = "";
@@ -164,8 +168,8 @@
             $('#messageInput').attr("disabled", "disabled");
             $('#sendButton').attr("disabled", "disabled");
             $('#disconnectButton').attr("disabled", "disabled");
-            canvas = document.getElementById('canvas');
-            ctx = canvas.getContext('2d');
+            //canvas = $('#canvas')[0]; // document.getElementById('canvas');
+            //ctx = canvas.getContext('2d');
             urlCreator = window.URL || window.webkitURL;
             $(document).mousemove((e) => onMouseMove(e));
             $(document).mousedown((e) => onMouseDown(e));
@@ -174,11 +178,6 @@
             $(document).keydown((e) => onKeyDown(e));
             $(document).keyup((e) => onKeyUp(e));
             $(document).mouseup((e) => onMouseUp(e));
-
-            var canvas = document.getElementById("blobImage");
-            canvas.oncontextmenu = function (e) {
-                stopEvent(e);
-            };
 
             clientHeight = $(window).height();
             clientWidth = $(window).width();
@@ -235,10 +234,7 @@
 
             //console.log(e);
             sendCompactEvent(e);
-            if (e.button == 2) {
-                e.preventDefault();
-                return false;
-            }
+          
         }
         function onMouseUp(e) {
             eventX = e.pageX;
@@ -254,7 +250,7 @@
             }
         }
         function onMouseWheel(e) {
-            if (e.srcElement.id == "blobImage") stopEvent(e);
+            //if (e.srcElement.id == "blobImage") stopEvent(e);
             $('#mouseX').val(e.wheelDeltaX);
             $('#mouseY').val(e.wheelDeltaY);
             $('#mouseEventName').val(e.type);
@@ -291,8 +287,9 @@
         <br />
     </div>
 
-    <img id="blobImage" oncontextmenu="return false;" />
-    <canvas id="canvas" height="500" width="500" oncontextmenu="return false;"></canvas>
+    <img id="blobImage" oncontextmenu="return false;" ondrag="return false;" onmousedown="return false;" />
+    <!--<canvas id="canvas" height="500" width="500" oncontextmenu="return false;" onmousedown="return false;"></canvas>
+        -->
     <div id="lastMessage"></div>
 
 </body>

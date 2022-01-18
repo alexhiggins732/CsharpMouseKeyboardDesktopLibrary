@@ -29,35 +29,48 @@
         private void InitializeComponent()
         {
             this.groupBox1 = new System.Windows.Forms.GroupBox();
+            this.lblLastDate = new System.Windows.Forms.Label();
             this.listView1 = new System.Windows.Forms.ListView();
-            this.columnHeader1 = new System.Windows.Forms.ColumnHeader();
-            this.columnHeader4 = new System.Windows.Forms.ColumnHeader();
-            this.columnHeader2 = new System.Windows.Forms.ColumnHeader();
-            this.columnHeader3 = new System.Windows.Forms.ColumnHeader();
-            this.columnHeader5 = new System.Windows.Forms.ColumnHeader();
+            this.columnHeader1 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
+            this.columnHeader4 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
+            this.columnHeader2 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
+            this.columnHeader3 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
+            this.columnHeader5 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.curXYLabel = new System.Windows.Forms.Label();
             this.groupBox2 = new System.Windows.Forms.GroupBox();
             this.listView2 = new System.Windows.Forms.ListView();
-            this.columnHeader6 = new System.Windows.Forms.ColumnHeader();
-            this.columnHeader11 = new System.Windows.Forms.ColumnHeader();
-            this.columnHeader12 = new System.Windows.Forms.ColumnHeader();
-            this.columnHeader13 = new System.Windows.Forms.ColumnHeader();
-            this.columnHeader14 = new System.Windows.Forms.ColumnHeader();
-            this.columnHeader15 = new System.Windows.Forms.ColumnHeader();
+            this.columnHeader6 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
+            this.columnHeader11 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
+            this.columnHeader12 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
+            this.columnHeader13 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
+            this.columnHeader14 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
+            this.columnHeader15 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.groupBox1.SuspendLayout();
             this.groupBox2.SuspendLayout();
             this.SuspendLayout();
             // 
             // groupBox1
             // 
+            this.groupBox1.Controls.Add(this.lblLastDate);
             this.groupBox1.Controls.Add(this.listView1);
             this.groupBox1.Controls.Add(this.curXYLabel);
-            this.groupBox1.Location = new System.Drawing.Point(12, 12);
+            this.groupBox1.Location = new System.Drawing.Point(24, 23);
+            this.groupBox1.Margin = new System.Windows.Forms.Padding(6);
             this.groupBox1.Name = "groupBox1";
-            this.groupBox1.Size = new System.Drawing.Size(391, 150);
+            this.groupBox1.Padding = new System.Windows.Forms.Padding(6);
+            this.groupBox1.Size = new System.Drawing.Size(782, 288);
             this.groupBox1.TabIndex = 0;
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "Mouse";
+            // 
+            // lblLastDate
+            // 
+            this.lblLastDate.AutoSize = true;
+            this.lblLastDate.Location = new System.Drawing.Point(510, 42);
+            this.lblLastDate.Name = "lblLastDate";
+            this.lblLastDate.Size = new System.Drawing.Size(215, 25);
+            this.lblLastDate.TabIndex = 2;
+            this.lblLastDate.Text = "12/12/9999 99:99 pm";
             // 
             // listView1
             // 
@@ -67,9 +80,11 @@
             this.columnHeader2,
             this.columnHeader3,
             this.columnHeader5});
-            this.listView1.Location = new System.Drawing.Point(6, 38);
+            this.listView1.HideSelection = false;
+            this.listView1.Location = new System.Drawing.Point(12, 73);
+            this.listView1.Margin = new System.Windows.Forms.Padding(6);
             this.listView1.Name = "listView1";
-            this.listView1.Size = new System.Drawing.Size(379, 106);
+            this.listView1.Size = new System.Drawing.Size(754, 200);
             this.listView1.TabIndex = 1;
             this.listView1.UseCompatibleStateImageBehavior = false;
             this.listView1.View = System.Windows.Forms.View.Details;
@@ -101,17 +116,20 @@
             // curXYLabel
             // 
             this.curXYLabel.AutoSize = true;
-            this.curXYLabel.Location = new System.Drawing.Point(22, 22);
+            this.curXYLabel.Location = new System.Drawing.Point(44, 42);
+            this.curXYLabel.Margin = new System.Windows.Forms.Padding(6, 0, 6, 0);
             this.curXYLabel.Name = "curXYLabel";
-            this.curXYLabel.Size = new System.Drawing.Size(0, 13);
+            this.curXYLabel.Size = new System.Drawing.Size(0, 25);
             this.curXYLabel.TabIndex = 0;
             // 
             // groupBox2
             // 
             this.groupBox2.Controls.Add(this.listView2);
-            this.groupBox2.Location = new System.Drawing.Point(12, 168);
+            this.groupBox2.Location = new System.Drawing.Point(24, 323);
+            this.groupBox2.Margin = new System.Windows.Forms.Padding(6);
             this.groupBox2.Name = "groupBox2";
-            this.groupBox2.Size = new System.Drawing.Size(391, 150);
+            this.groupBox2.Padding = new System.Windows.Forms.Padding(6);
+            this.groupBox2.Size = new System.Drawing.Size(782, 288);
             this.groupBox2.TabIndex = 0;
             this.groupBox2.TabStop = false;
             this.groupBox2.Text = "Keyboard";
@@ -125,9 +143,11 @@
             this.columnHeader13,
             this.columnHeader14,
             this.columnHeader15});
-            this.listView2.Location = new System.Drawing.Point(6, 19);
+            this.listView2.HideSelection = false;
+            this.listView2.Location = new System.Drawing.Point(12, 37);
+            this.listView2.Margin = new System.Windows.Forms.Padding(6);
             this.listView2.Name = "listView2";
-            this.listView2.Size = new System.Drawing.Size(379, 125);
+            this.listView2.Size = new System.Drawing.Size(754, 237);
             this.listView2.TabIndex = 1;
             this.listView2.UseCompatibleStateImageBehavior = false;
             this.listView2.View = System.Windows.Forms.View.Details;
@@ -162,11 +182,12 @@
             // 
             // HookTestForm
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
+            this.AutoScaleDimensions = new System.Drawing.SizeF(12F, 25F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(415, 330);
+            this.ClientSize = new System.Drawing.Size(830, 635);
             this.Controls.Add(this.groupBox2);
             this.Controls.Add(this.groupBox1);
+            this.Margin = new System.Windows.Forms.Padding(6);
             this.Name = "HookTestForm";
             this.Text = "Hook Example Usage";
             this.Load += new System.EventHandler(this.TestForm_Load);
@@ -195,6 +216,7 @@
         private System.Windows.Forms.ColumnHeader columnHeader13;
         private System.Windows.Forms.ColumnHeader columnHeader14;
         private System.Windows.Forms.ColumnHeader columnHeader15;
+        private System.Windows.Forms.Label lblLastDate;
     }
 }
 

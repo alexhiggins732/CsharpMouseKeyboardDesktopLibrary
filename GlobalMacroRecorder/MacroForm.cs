@@ -57,8 +57,9 @@ namespace GlobalMacroRecorder
             ghk = new GlobalHotkey(Constants.ESC, Keys.Escape, this);
             hotkeymessage = false;
             foreverloopmessage = false;
-
         }
+
+
 
 
         [DllImport("gdi32.dll")]
@@ -117,6 +118,7 @@ namespace GlobalMacroRecorder
                 }
                 PlayWorker.CancelAsync();
             }
+            //runningTest = false;
         }
 
 
@@ -411,7 +413,7 @@ namespace GlobalMacroRecorder
                     //events.AddRange(JsonEvents);
                     var storedEvents = EventStorage.LoadFromJson(ofd.FileName);
                     events.AddRange(storedEvents);
-                       
+
                     loaded = true;
                 }
             }

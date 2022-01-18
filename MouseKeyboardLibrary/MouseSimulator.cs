@@ -1,6 +1,7 @@
 ﻿using System.Runtime.InteropServices;
 using System.Drawing;
 using System.Windows.Forms;
+using System;
 
 namespace MouseKeyboardLibrary
 {
@@ -37,12 +38,28 @@ namespace MouseKeyboardLibrary
         const int MOUSEEVENTF_MIDDLEDOWN = 0x20;
         const int MOUSEEVENTF_MIDDLEUP = 0x40;
         const int MOUSEEVENTF_WHEEL = 0x800;
-        const int MOUSEEVENTF_ABSOLUTE = 0x8000; 
+        const int MOUSEEVENTF_ABSOLUTE = 0x8000;
 
         #endregion
 
         #region Properties
 
+
+        public static Point LastPosition = Position;
+
+        public static DateTime LastUserMove { get; set; }
+        private static Point trackPosition(Point position)
+        {
+            if (LastPosition != position)
+            {
+                LastPosition = position;
+                LastUserMove = DateTime.Now;
+            }
+            return position;
+        }
+
+
+        private static Point cursorPosition => new Point(Cursor.Position.X, Cursor.Position.Y);
         /// <summary>
         /// Gets or sets a structure that represents both X and Y mouse coordinates
         /// </summary>
@@ -50,11 +67,11 @@ namespace MouseKeyboardLibrary
         {
             get
             {
-                return new Point(Cursor.Position.X, Cursor.Position.Y);
+                return trackPosition(cursorPosition);
             }
             set
             {
-                Cursor.Position = value;
+                LastPosition = Cursor.Position = value;
             }
         }
 
@@ -65,11 +82,11 @@ namespace MouseKeyboardLibrary
         {
             get
             {
-                return Cursor.Position.X;
+                return trackPosition(cursorPosition).X;
             }
             set
             {
-                Cursor.Position = new Point(value, Y);
+                LastPosition = Cursor.Position = new Point(value, Y);
             }
         }
 
@@ -80,14 +97,19 @@ namespace MouseKeyboardLibrary
         {
             get
             {
-                return Cursor.Position.Y;
+                return trackPosition(cursorPosition).Y;
             }
             set
             {
-                Cursor.Position = new Point(X, value);
+                LastPosition = Cursor.Position = new Point(X, value);
             }
-        } 
+        }
 
+
+        public static void TrackPosition(int x, int y)
+        {
+            trackPosition(new Point(x, y));
+        }
         #endregion
 
         #region Methods
@@ -150,6 +172,8 @@ namespace MouseKeyboardLibrary
             }
         }
 
+
+
         /// <summary>
         /// Click a mouse button (down then up)
         /// </summary>
@@ -178,6 +202,11 @@ namespace MouseKeyboardLibrary
                     Click(MouseButton.Right);
                     break;
             }
+        }
+
+        public static void UserUpdated()
+        {
+            LastUserMove = DateTime.Now;
         }
 
         /// <summary>
@@ -235,7 +264,7 @@ namespace MouseKeyboardLibrary
         public static void Hide()
         {
             ShowCursor(false);
-        } 
+        }
 
         #endregion
 
