@@ -96,8 +96,14 @@ namespace MouseKeyboardEvents
                 fileName = $"data-{ts}";
             }
             var json = JsonConvert.SerializeObject(events, Formatting.Indented);
-            Directory.CreateDirectory("EventsJson");
-            File.WriteAllText($"EventsJson/{fileName}.json", json);
+
+            var name = Path.GetFileNameWithoutExtension(fileName);
+            var nameWithExtension = $"{name}.json";
+            var fi = new FileInfo(fileName);
+            var dir = Directory.CreateDirectory(fi.Directory.FullName);
+            fi = new FileInfo(Path.Combine(dir.FullName, nameWithExtension));
+            var path = fi.FullName;
+            File.WriteAllText(path, json);
         }
 
         /// <summary>
@@ -114,8 +120,13 @@ namespace MouseKeyboardEvents
                 var ts = DateTime.Now.ToString("yyyy-MM-dd_hh-mm-ss");
                 fileName = $"data-{ts}";
             }
-            Directory.CreateDirectory("EventsJson");
-            var path = $"EventsJson/{fileName}.bin";
+            
+            var name = Path.GetFileNameWithoutExtension(fileName);
+            var nameWithExtension = $"{name}.bin";
+            var fi = new FileInfo(fileName);
+            var dir = Directory.CreateDirectory(fi.Directory.FullName);
+            fi = new FileInfo(Path.Combine(dir.FullName, nameWithExtension));
+            var path = fi.FullName;
             /* legacy
             using (var fs = new FileStream(path, FileMode.Create))
             {

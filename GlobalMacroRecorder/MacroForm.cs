@@ -46,6 +46,7 @@ namespace GlobalMacroRecorder
         public MacroForm()
         {
             InitializeComponent();
+            //CleanupMacro();
             GetScale();
             mouseHook.MouseMove += mouseHook_MouseMove;
             mouseHook.MouseDown += mouseHook_MouseDown;
@@ -59,7 +60,41 @@ namespace GlobalMacroRecorder
             foreverloopmessage = false;
         }
 
+        void CleanupMacro()
+        {
+            var dirty = @"C:\Users\alexh\source\repos\alexhiggins732\CsharpMouseKeyboardDesktopLibrary\EventsJson\data-2022-06-17_05-44-14 .trim.json";
+            var cleaned = @"C:\Users\alexh\source\repos\alexhiggins732\CsharpMouseKeyboardDesktopLibrary\EventsJson\data-2022-06-17_05-44-14.cleaned.json";
 
+
+            var eventList = EventStorage.LoadFromJson(dirty).ToList();
+
+            bool go = true;
+            var idx = 0;
+            MouseKeyEvent last = null;
+            while (go)
+            {
+                if (idx >= eventList.Count)
+                {
+                    go = false;
+                }
+                else
+                {
+                    var e = eventList[idx];
+                    if (e.MacroEventType == MouseKeyEventType.MouseMove &&
+                        last?.MacroEventType == MouseKeyEventType.MouseMove)
+                    {
+                        eventList.RemoveAt(idx - 1);
+                    }
+                    else
+                    {
+                        idx++;
+                    }
+                    last = e;
+                }
+
+            }
+            //EventStorage.SaveAsJson(eventList, cleaned);
+        }
 
 
         [DllImport("gdi32.dll")]
@@ -197,7 +232,21 @@ namespace GlobalMacroRecorder
                 progressBar1.Maximum = events.Count();
                 progressBar1.Visible = true;
             }
-            PlayWorker.RunWorkerAsync();
+            if (!PlayWorker.IsBusy)
+            {
+                PlayWorker.RunWorkerAsync();
+            }
+            else
+            {
+                //System.Threading.ThreadPool.QueueUserWorkItem(playBackMacroButton_ClickAsync);
+            }
+
+        }
+
+        private void playBackMacroButton_ClickAsync(object state)
+        {
+            Thread.Sleep(50);
+            this.Invoke((MethodInvoker)(() => playBackMacroButton_Click(null, null)));
         }
 
         private void PlayWorker_DoWork(object sender, System.ComponentModel.DoWorkEventArgs e)
@@ -333,10 +382,11 @@ namespace GlobalMacroRecorder
             {
                 var ts = DateTime.Now.ToString("yyyy-MM-dd_hh-mm-ss");
                 var json = JsonConvert.SerializeObject(events, Formatting.Indented);
-                Directory.CreateDirectory("EventsJson");
-                var fileName = $"EventsJson/data-{ts}";
+                var target = Directory.CreateDirectory("..\\..\\..\\EventsJson");
+                var fileName = $"data-{ts}.json";
                 //File.WriteAllText($"EventsJson/data-{ts}.json", json);
-                EventStorage.Save(events, fileName);
+                var dest = Path.Combine(target.FullName, fileName);
+                EventStorage.Save(events, dest);
                 //using (Stream stream = File.Open("data.bin", FileMode.Create))
                 //{
                 //    bin.Serialize(stream, events);
